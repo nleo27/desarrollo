@@ -316,6 +316,11 @@ return [
             'can' => 'manage-blog',
         ],
         [
+            'text' => 'Crear Periodo',
+            'url' => 'create-periodo',
+            'can' => '',
+        ],
+        [
             'text' => 'Crear Usuario',
             'url' => 'create-usuario',
             'can' => '',
