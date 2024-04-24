@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Periodo extends Model
 {
-    use HasFactory;
+    protected $fillable = ['nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'periodo_activo'];
 }

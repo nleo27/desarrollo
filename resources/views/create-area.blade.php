@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
 @endsection
 
+@section('title', 'Area')
+
 @section('content')
 
     <div class="card mt-5">
@@ -58,18 +60,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                <form action="{{ route('areas.store') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre">
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción</label>
-                        <input type="text" class="form-control" id="descripcion" name="descripcion">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Registrar</button>
-                </form>
+                    <form id="form-registrar-area" action="{{ route('areas.store') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre">
+                            <span id="nombre-error" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion">
+                        </div>
+                        <button type="button" id="btn-registrar" class="btn btn-primary">Registrar</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -97,5 +100,32 @@
         }
     });
 </script>
+
+@section('js')
+<script>
+    $(document).ready(function() {
+        $('#modal-registrar-area').on('shown.bs.modal', function () {
+            $('#nombre-error').text('');
+            $('#nombre').val('');
+            $('#descripcion').val('');
+        });
+
+        $('#btn-registrar').click(function() {
+            var nombre = $('#nombre').val();
+            if (nombre === '') {
+                $('#nombre-error').text('El campo nombre es obligatorio.');
+                return false;
+            }
+
+            // Si todos los campos están llenos, envía el formulario
+            $('#form-registrar-area').submit();
+        });
+
+        $('#modal-registrar-area').on('hidden.bs.modal', function () {
+            $('#nombre-error').text('');
+        });
+    });
+</script>
+@endsection
 @endsection
 

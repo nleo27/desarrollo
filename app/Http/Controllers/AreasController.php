@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Area; 
-use Flash;
+use Toastr;
 
 class AreasController extends Controller
 {
@@ -16,6 +16,14 @@ class AreasController extends Controller
 
     public function store(Request $request)
     {
+       
+         // Valida si el nombre del área ya existe en la base de datos
+         $existingArea = Area::where('nombre', $request->nombre)->first();
+         if ($existingArea) {
+            toastr()->error('No se puede registrar el área porque ya existe.', 'Error');
+             
+             return redirect()->route('areas.store');
+         }
         // Valida los datos del formulario
         $request->validate([
             'nombre' => 'required|string|max:255|unique:areas',
@@ -34,3 +42,4 @@ class AreasController extends Controller
         return redirect()->route('areas.store');
     }
 }
+

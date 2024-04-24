@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
 @endsection
 
+@section('title', 'Usuarios')
+
 @section('content')
     <div class="card mt-5">
         <div class="card-header">
