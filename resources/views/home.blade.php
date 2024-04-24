@@ -19,7 +19,7 @@
         <div class="card bg-primary text-white">
             <div class="card-body">
                 <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">Tienes  áreas registradas en tu base de datos.</p>
+                <p class="card-text">No hay areas registardas.</p>
                 <a href="" class="btn btn-light">
                     <i class="fas fa-list"></i> Ver Áreas
                 </a>
@@ -30,7 +30,7 @@
         <div class="card bg-info text-white">
             <div class="card-body">
                 <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">Tienes áreas registradas en tu base de datos.</p>
+                <p class="card-text">Tienes mucha informacion registrada</p>
                 <a href="" class="btn btn-light">
                     <i class="fas fa-list"></i> Ver Áreas
                 </a>
