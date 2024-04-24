@@ -8,7 +8,7 @@
         <div class="card bg-danger text-white">
             <div class="card-body">
                 <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">Tienes  áreas registradas en tu base de datos.</p>
+                <p class="card-text">No tienes datos registrados en las areas.</p>
                 <a href="" class="btn btn-light">
                     <i class="fas fa-list"></i> Ver Áreas
                 </a>
