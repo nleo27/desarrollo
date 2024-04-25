@@ -325,20 +325,20 @@ return [
             'text' => 'Crear Periodo',
             'url' => 'create-periodo',
             'icon' => 'fas fa-fw fa-clock',
-            'can' => 'createPeriodo',
+            'can' => '',
         ],
         [
             'text' => 'Crear Usuario',
             'url' => 'create-usuario',
             'icon' => 'fas fa-fw fa-user',
-            'can' => 'manageUsuarios',
+            'can' => '',
         ],
 
         [
             'text' => 'Crear Area',
             'url' => 'create-area',
             'icon' => 'fas fa-fw fa-house-user',
-            'can' => 'manageAreas',
+            'can' => '',
         ],
 
         
