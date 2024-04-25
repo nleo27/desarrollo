@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
 @endsection
 
-@section('title', 'Perido')
+@section('title', 'Periodo')
   
 
 
@@ -22,29 +22,34 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center" id="lista-area">
+                <table class="table table-bordered table-striped text-center" id="lista-periodo">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Descripcion</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                    
+                    @foreach ($periodos as $periodo)
                         <tr>
-                            <td>01</td>
-                            <td>Nuevo Periodo</td>
-                            <td>2023-2026</td>
+                            <td>{{ $periodo->id }}</td>
+                            <td>{{ $periodo->nombre }}</td>
+                            <td>{{ $periodo->descripcion }}</td>
+                            <td>{{ $periodo->fecha_inicio }}</td>
+                            <td>{{ $periodo->fecha_fin }}</td>
+                            
                             
                             <td>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-editar-area"><i class="fas fa-edit"></i> Editar</button>
+                            <a href="{{ route('seleccionar-periodo', ['id' => $periodo->id]) }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Seleccionar</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-area"><i class="fas fa-trash-alt"></i> Eliminar</button>
                             </td>
                    
-                        
+                    @endforeach     
                     </tbody>
                 </table>
             </div>
@@ -107,7 +112,7 @@
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 <script>
-    new DataTable('#lista-area',{
+    new DataTable('#lista-periodo',{
         responsive: true,
         autoWidth: false,
 
@@ -122,7 +127,7 @@
     });
 </script>
 
-@section('js')
+
 
 <script src="{{ asset('js/validar-periodo.js') }}"></script>
 

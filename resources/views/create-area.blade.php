@@ -101,7 +101,7 @@
     });
 </script>
 
-@section('js')
+
 <script>
     $(document).ready(function() {
         $('#modal-registrar-area').on('shown.bs.modal', function () {
@@ -127,5 +127,5 @@
     });
 </script>
 @endsection
-@endsection
+
 

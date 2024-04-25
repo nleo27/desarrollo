@@ -4,70 +4,67 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use App\Models\Periodo;
-use Carbon\Carbon;
+
 
 use Illuminate\Http\Request;
 
 class PeriodoController extends Controller
 {
+    // Método para mostrar el formulario de creación de periodo
     public function create()
     {
-        return view('create-periodo');
+        $periodos = Periodo::all();
+
+        return view('create-periodo', compact('periodos'));
     }
 
+    // Método para guardar el nuevo periodo
     public function create2(Request $request)
     {
-        // Validaciones
-    $request->validate([
-        'nombre_periodo' => [
-            'required',
-            Rule::unique('periodos', 'nombre')
-        ],
-        'descripcion_periodo' => 'required',
-        'fecha_inicio' => 'required|date',
-        'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-    ]);
-
-        // Verificar si hay un periodo activo y desactivarlo si es necesario
-        if ($request->has('periodo_activo')) {
-            Periodo::where('periodo_activo', true)->update(['periodo_activo' => false]);
-        }
-
-        
-        $fecha_inicio = $request->input('fecha_inicio');
-        $fecha_fin = $request->input('fecha_fin');
-
-        // Convertir las fechas al formato esperado por la base de datos
-        $fecha_inicio_bd = Carbon::createFromFormat('d/m/Y', $fecha_inicio)->format('Y-m-d');
-        $fecha_fin_bd = Carbon::createFromFormat('d/m/Y', $fecha_fin)->format('Y-m-d');
-
-        
-        // Verificar que la fecha inicial no sea mayor que la fecha final
-        if ($fecha_inicio > $fecha_fin) {
-            
-            toastr()->error('No se puede registrar las fechas.', 'Error');
+        // Verificar si el nombre del periodo ya existe en la base de datos
+        $nombre_periodo_existente = Periodo::where('nombre', $request->nombre_periodo)->exists();
+        if ($nombre_periodo_existente) {
+            toastr()->error('El nombre del periodo ya existe.', 'Error');
             return redirect()->back();
         }
 
+        $fecha_inicio = $request->input('fecha_inicio');
+        $fecha_fin = $request->input('fecha_fin');
 
-            // Verificar si las fechas se superponen con otro periodo existente
-            $periodo_superpuesto = Periodo::where(function ($query) use ($fecha_inicio_bd, $fecha_fin_bd) {
-                $query->whereBetween('fecha_inicio', [$fecha_inicio_bd, $fecha_fin_bd])
-                    ->orWhereBetween('fecha_fin', [$fecha_inicio_bd, $fecha_fin_bd])
-                    ->orWhere(function ($query) use ($fecha_inicio_bd, $fecha_fin_bd) {
-                        $query->where('fecha_inicio', '<', $fecha_inicio_bd)
-                                ->where('fecha_fin', '>', $fecha_fin_bd);
-                    });
-            })->exists();
+        // Verificar que la fecha inicial no sea mayor que la fecha final
+        if ($fecha_inicio > $fecha_fin) {
+            toastr()->error('La fecha de inicio no puede ser mayor que la fecha de fin.', 'Error');
+            return redirect()->back();
+        }
 
-            if ($periodo_superpuesto) {
-                toastr()->error('Las fechas del periodo se superponen con otro periodo existente.', 'Error');
-                return redirect()->back();
-            }
+        // Verificar si las fechas se superponen con otro periodo existente
+        $periodo_superpuesto = Periodo::where(function ($query) use ($fecha_inicio, $fecha_fin) {
+            $query->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
+                ->orWhereBetween('fecha_fin', [$fecha_inicio, $fecha_fin])
+                ->orWhere(function ($query) use ($fecha_inicio, $fecha_fin) {
+                    $query->where('fecha_inicio', '<', $fecha_inicio)
+                        ->where('fecha_fin', '>', $fecha_fin);
+                });
+        })->exists();
 
-            // Imprimir mensajes de error en la consola para depuración
-            dd('Fecha de inicio:', $fecha_inicio, 'Fecha de fin:', $fecha_fin, 'Fecha inicio BD:', $fecha_inicio_bd, 'Fecha fin BD:', $fecha_fin_bd, 'Periodo superpuesto:', $periodo_superpuesto);
+        if ($periodo_superpuesto) {
+            toastr()->error('Las fechas del periodo se superponen con otro periodo existente.', 'Error');
+            return redirect()->back();
+        }
+        
+        
+        // Validaciones
+        $request->validate([
+            'nombre_periodo' => [
+                'required',
+                Rule::unique('periodos', 'nombre')->ignore($request->id),
+            ],
+            'descripcion_periodo' => 'required',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+        ]);
 
+  
         // Crear el nuevo periodo
         Periodo::create([
             'nombre' => $request->input('nombre_periodo'),
@@ -77,6 +74,17 @@ class PeriodoController extends Controller
             'activo' => $request->has('periodo_activo'),
         ]);
 
-        return redirect()->route('periodo.create2');
+        toastr()->success('Periodo registrado correctamente', 'Éxito');
+
+        return redirect()->route('create_periodo');
     }
+
+    public function seleccionarPeriodo($id)
+{
+    // Guardar el ID del periodo seleccionado en la sesión
+    Session::put('periodo_seleccionado', $id);
+    
+    // Redireccionar a la página de documentos
+    return redirect()->route('areas.store');
+}
 }

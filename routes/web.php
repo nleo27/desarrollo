@@ -20,6 +20,7 @@ Route::get('/create-area', [AreasController::class, 'index'])->name('create_area
 Route::post('/create-area', [AreasController::class, 'store'])->name('areas.store');
 Route::get('/create-periodo', [PeriodoController::class, 'create'])->name('create_periodo');
 Route::post('/create-periodo', [PeriodoController::class, 'create2'])->name('periodo.create2');
+Route::get('/seleccionar-periodo/{id}', [PeriodoController::class, 'seleccionarPeriodo'])->name('seleccionar-periodo');
 
 
 
