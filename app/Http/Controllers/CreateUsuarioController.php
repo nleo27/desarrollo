@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Area;
+use App\Models\User;
 
 class CreateUsuarioController extends Controller
 {
     public function index()
     {
-        return view('create-usuario');
+        $areas = Area::all();
+        return view('create-usuario', compact('areas'));
     }
 }

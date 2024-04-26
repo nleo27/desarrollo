@@ -56,56 +56,71 @@
     </div>
 
     <!-- Modal Registrar Usuario -->
-    <div class="modal fade" id="modal-registrar-usuario">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Registrar Usuario</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="dni">DNI:</label>
-                            <input type="text" class="form-control" id="dni" name="dni">
+<div class="modal fade" id="modal-registrar-usuario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Registrar Usuario</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('register') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dni">DNI:</label>
+                                <input type="text" class="form-control" id="dni" name="dni">
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre">Nombre:</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidos">Apellidos:</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono:</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono">
+                            </div>
+                            <div class="form-group">
+                                <label for="area">Área:</label>
+                                <select class="form-control" id="area" name="area">
+                                @foreach($areas as $area)
+                                    <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                @endforeach    
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="correo">Correo:</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="clave">Clave:</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                            <div class="form-group">
+                                <label for="rol">Rol:</label>
+                                <select class="form-control" id="rol" name="rol">
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Jefe">Jefe</option>
+                                    <option value="Usuario">Usuario</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="apellidos">Apellidos:</label>
-                            <input type="text" class="form-control" id="apellidos" name="apellidos">
-                        </div>
-                        <div class="form-group">
-                            <label for="apellidos">Correo:</label>
-                            <input type="email" class="form-control" id="correo" name="correo">
-                        </div>
-                        <div class="form-group">
-                            <label for="apellidos">Clave:</label>
-                            <input type="password" class="form-control" id="clave" name="clave">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
-                        </div>
-                        <div class="form-group">
-                            <label for="area">Área:</label>
-                            <input type="text" class="form-control" id="area" name="area">
-                        </div>
-                        <div class="form-group">
-                            <label for="rol">Rol:</label>
-                            <input type="text" class="form-control" id="rol" name="rol">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 @endsection
 
 @section('js')
