@@ -9,4 +9,9 @@ class Area extends Model
 {
     use HasFactory;
     protected $fillable = ['nombre', 'descripcion'];
+
+    public function usuarios()
+    {
+        return $this->hasMany(Usuario::class, 'area_id');
+    }
 }

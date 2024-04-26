@@ -6,6 +6,7 @@ use App\Http\Controllers\CreateUsuarioController;
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\RegistroUsuario;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -24,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/create-periodo', [PeriodoController::class, 'create2'])->name('periodo.create2');
     Route::get('/seleccionar-periodo/{id}', [PeriodoController::class, 'seleccionarPeriodo'])->name('seleccionar-periodo');
     Route::get('/documento/{id}', [DocumentoController::class, 'crear'])->name('documento.crear');
+    Route::post('/usuarios', [RegistroUsuario::class, 'store'])->name('usuarios.store');
 });
 
 

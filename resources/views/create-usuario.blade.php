@@ -33,21 +33,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>12345678</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>jperez@gmail.com</td>
-                            <td>999888777</td>
-                            <td>Recursos Humanos</td>
-                            <td>Admin</td>
-                            <td>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-editar-usuario"><i class="fas fa-edit"></i> Editar</button>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-usuario"><i class="fas fa-trash-alt"></i> Eliminar</button>
-                            </td>
-                        </tr>
+                        @foreach($usuarios as $usuario) 
                         
+                            <tr>
+                                <td>{{ $usuario->id }}</td>
+                                <td>{{ $usuario->dni }}</td>
+                                <td>{{ $usuario->name }}</td>
+                                <td>{{ $usuario->apellidos }}</td>
+                                <td>{{ $usuario->email }}</td>
+                                <td>{{ $usuario->telefono }}</td>
+                                <td>{{ $usuario->area ? $usuario->area->nombre : 'N/A' }}</td>
+                                <td>{{ $usuario->rol }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-editar-usuario"><i class="fas fa-edit"></i> Editar</button>
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-usuario"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                </td>
+                            </tr>
+                        @endforeach
                         
                     </tbody>
                 </table>
@@ -66,7 +68,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('register') }}" method="POST">
+                <form action="{{ route('usuarios.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -88,7 +90,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="area">Área:</label>
-                                <select class="form-control" id="area" name="area">
+                                <select class="form-control" id="area_id" name="area_id">
                                 @foreach($areas as $area)
                                     <option value="{{ $area->id }}">{{ $area->nombre }}</option>
                                 @endforeach    
