@@ -26,6 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/seleccionar-periodo/{id}', [PeriodoController::class, 'seleccionarPeriodo'])->name('seleccionar-periodo');
     Route::get('/documento/{id}', [DocumentoController::class, 'crear'])->name('documento.crear');
     Route::post('/usuarios', [RegistroUsuario::class, 'store'])->name('usuarios.store');
+    Route::get('/areas/{id}/edit', [AreasController::class, 'edit'])->name('areas.edit');
+    Route::put('/areas/{id}', 'AreasController@update')->name('areas.update');
 });
 
 

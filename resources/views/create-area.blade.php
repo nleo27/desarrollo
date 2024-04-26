@@ -77,14 +77,47 @@
             </div>
         </div>
     </div>
+
+   <!-- Modal Editar Area -->
+    <div class="modal fade" id="modal-editar-area">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar Área</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-editar-area" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="edit-nombre">Nombre</label>
+                            <input type="text" class="form-control" id="edit-nombre" name="nombre">
+                            <input type="hidden" id="edit-id" name="id">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-descripcion">Descripción</label>
+                            <input type="text" class="form-control" id="edit-descripcion" name="descripcion">
+                        </div>
+                        <button type="button" id="btn-editar" class="btn btn-primary">Actualizar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+
 <script>
     new DataTable('#lista-area',{
         responsive: true,
@@ -99,10 +132,13 @@
             "search": "Buscar"
         }
     });
+
+    
 </script>
 
 
 <script>
+   
     $(document).ready(function() {
         $('#modal-registrar-area').on('shown.bs.modal', function () {
             $('#nombre-error').text('');
@@ -125,7 +161,34 @@
             $('#nombre-error').text('');
         });
     });
-</script>
+
+    
+
+ </script>
+
+ <script>
+     $(document).ready(function() {
+    $(document).on('click', '.edit-area-btn', function() {
+        var id = $(this).data('id');
+        var nombre = $(this).data('nombre');
+        var descripcion = $(this).data('descripcion');
+        
+        console.log(id, nombre, descripcion); // Verifica los datos aquí
+        
+        $('#edit-id').val(id);
+        $('#edit-nombre').val(nombre);
+        $('#edit-descripcion').val(descripcion);
+        
+        $('#modal-editar-area').modal('show'); // Mostrar el modal manualmente
+    });
+    
+    $('#btn-editar').click(function() {
+        $('#form-editar-area').submit();
+    });
+});
+ </script>
+
+ 
 @endsection
 
 

@@ -41,5 +41,50 @@ class AreasController extends Controller
         // Redirecciona de vuelta a la página de áreas
         return redirect()->route('areas.store');
     }
+
+        /**
+         * Muestra el formulario de edición de un área.
+         *
+         * @param  int  $id
+         * @return \Illuminate\View\View
+         */
+        public function edit($id)
+        {
+            $area = Area::findOrFail($id);
+            return view('edit-area', compact('area'));
+        }
+
+
+         public function update(Request $request, $id)
+    {
+        // Valida los datos del formulario de edición
+        $request->validate([
+            'nombre' => 'required|string|max:255|unique:areas,nombre,' . $id,
+            'descripcion' => 'nullable|string|max:255',
+        ]);
+
+        // Verifica si hay otra área con el mismo nombre
+        $existingArea = Area::where('nombre', $request->nombre)
+                            ->where('id', '<>', $id) // Excluye el área actual
+                            ->first();
+
+        if ($existingArea) {
+            toastr()->error('Ya existe un área con ese nombre.', 'Error');
+            return back()->withInput();
+        }
+
+        // Busca el área por su ID y actualiza los datos
+        $area = Area::findOrFail($id);
+        $area->update([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        toastr()->success('Área actualizada correctamente', 'Notificación');
+
+        // Redirecciona a la página de áreas
+        return redirect()->route('areas.index');
+    }
+
 }
 
