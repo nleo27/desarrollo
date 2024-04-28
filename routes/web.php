@@ -27,7 +27,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/documento/{id}', [DocumentoController::class, 'crear'])->name('documento.crear');
     Route::post('/usuarios', [RegistroUsuario::class, 'store'])->name('usuarios.store');
     Route::get('/areas/{id}/edit', [AreasController::class, 'edit'])->name('areas.edit');
-    Route::put('/areas/{id}', 'AreasController@update')->name('areas.update');
+    Route::put('/areas/{id}', [AreasController::class, 'update'])->name('areas.update');
+    Route::delete('/areas/{id}', [AreasController::class, 'destroy'])->name('areas.destroy');
+    Route::get('/usuarios/{id}/edit', [CreateUsuarioController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/{id}', [CreateUsuarioController::class, 'update'])->name('usuarios.update');
 });
 
 

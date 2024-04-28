@@ -43,9 +43,10 @@
                                 <td>{{ $usuario->email }}</td>
                                 <td>{{ $usuario->telefono }}</td>
                                 <td>{{ $usuario->area ? $usuario->area->nombre : 'N/A' }}</td>
-                                <td>{{ $usuario->rol }}</td>
+                                <td>{{ $usuario->rol() }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-editar-usuario"><i class="fas fa-edit"></i> Editar</button>
+                                    <a class="btn btn-success btn-sm" href="{{ route('usuarios.edit', ['id' => $usuario->id]) }}"><i class="fas fa-edit"></i> Editar</a>
+                                    
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-usuario"><i class="fas fa-trash-alt"></i> Eliminar</button>
                                 </td>
                             </tr>
@@ -106,14 +107,7 @@
                                 <label for="clave">Clave:</label>
                                 <input type="password" class="form-control" id="password" name="password">
                             </div>
-                            <div class="form-group">
-                                <label for="rol">Rol:</label>
-                                <select class="form-control" id="rol" name="rol">
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Jefe">Jefe</option>
-                                    <option value="Usuario">Usuario</option>
-                                </select>
-                            </div>
+                            
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Registrar</button>

@@ -1,9 +1,11 @@
 @extends('adminlte::page')
 
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap4.css">
 @endsection
 
 @section('title', 'Area')
@@ -38,9 +40,62 @@
                             <td>{{ $area->descripcion }}</td>
                             
                             <td>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-editar-area"><i class="fas fa-edit"></i> Editar</button>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-area"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-area{{$area->id}}"><i class="fas fa-edit"></i> Editar</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirm-delete{{$area->id}}"><i class="fas fa-trash-alt"></i> Eliminar</button>
                             </td>
+
+                            <!-- Modal Editar Area -->
+                            <div class="modal fade" id="edit-area{{$area->id}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Editar Área</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="form-editar-area" action="{{ route('areas.update', ['id' => $area->id]) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="form-group">
+                                                    <label for="edit-nombre">Nombre</label>
+                                                    <input type="text" class="form-control" value= "{{ $area->nombre }}" id="edit-nombre" name="nombre" require>
+                                                    <input type="hidden" name="id" value="{{ $area->id }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit-descripcion">Descripción</label>
+                                                    <input type="text" class="form-control" value= "{{ $area->descripcion }}" id="edit-descripcion" name="descripcion" require>
+                                                </div>
+                                                <button type="submit" id="btn-editar" class="btn btn-primary">Actualizar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Confirmar Eliminación -->
+                            <div class="modal fade" id="confirm-delete{{$area->id}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Confirmar Eliminación</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que deseas eliminar el área "{{ $area->nombre }}"?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <form action="{{ route('areas.destroy', $area->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     @endforeach
                         
                     </tbody>
@@ -49,7 +104,7 @@
         </div>
     </div>
 
-    <!-- Modal Registrar Usuario -->
+    <!-- Modal Registrar Area-->
     <div class="modal fade" id="modal-registrar-area">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -78,45 +133,17 @@
         </div>
     </div>
 
-   <!-- Modal Editar Area -->
-    <div class="modal fade" id="modal-editar-area">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Editar Área</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-editar-area" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="edit-nombre">Nombre</label>
-                            <input type="text" class="form-control" id="edit-nombre" name="nombre">
-                            <input type="hidden" id="edit-id" name="id">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-descripcion">Descripción</label>
-                            <input type="text" class="form-control" id="edit-descripcion" name="descripcion">
-                        </div>
-                        <button type="button" id="btn-editar" class="btn btn-primary">Actualizar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 @endsection
 
 @section('js')
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap4.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
-<script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap4.js"></script>
 
 <script>
     new DataTable('#lista-area',{
@@ -164,28 +191,6 @@
 
     
 
- </script>
-
- <script>
-     $(document).ready(function() {
-    $(document).on('click', '.edit-area-btn', function() {
-        var id = $(this).data('id');
-        var nombre = $(this).data('nombre');
-        var descripcion = $(this).data('descripcion');
-        
-        console.log(id, nombre, descripcion); // Verifica los datos aquí
-        
-        $('#edit-id').val(id);
-        $('#edit-nombre').val(nombre);
-        $('#edit-descripcion').val(descripcion);
-        
-        $('#modal-editar-area').modal('show'); // Mostrar el modal manualmente
-    });
-    
-    $('#btn-editar').click(function() {
-        $('#form-editar-area').submit();
-    });
-});
  </script>
 
  

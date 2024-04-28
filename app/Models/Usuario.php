@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
-class Usuario extends Model
+
+class Usuario extends Authenticatable
 {
     use HasFactory;
+    use HasRoles;
 
     protected $table = 'users';
 
@@ -28,4 +32,13 @@ class Usuario extends Model
     {
         return $this->belongsTo(Area::class, 'area_id');
     }
+
+    public function rol()
+{
+    if ($this->roles->isNotEmpty()) {
+        return $this->roles->first()->name;
+    }
+    
+    return 'Sin rol';
+}
 }

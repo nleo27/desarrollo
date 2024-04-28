@@ -16,7 +16,7 @@ class RegistroUsuario extends Controller
             'apellidos' => 'required',
             'area_id' => 'required',
             'email' => 'required',
-            'rol' => 'required',
+            'rol' => 'nullable',
             'password' => 'required',
         ]);
 

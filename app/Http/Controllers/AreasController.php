@@ -49,42 +49,55 @@ class AreasController extends Controller
          * @return \Illuminate\View\View
          */
         public function edit($id)
-        {
-            $area = Area::findOrFail($id);
-            return view('edit-area', compact('area'));
-        }
+            {
+                $area = Area::findOrFail($id);
+                return view('edit-area', compact('area'));
+            }
 
 
          public function update(Request $request, $id)
-    {
-        // Valida los datos del formulario de edición
-        $request->validate([
-            'nombre' => 'required|string|max:255|unique:areas,nombre,' . $id,
-            'descripcion' => 'nullable|string|max:255',
-        ]);
+            {
 
-        // Verifica si hay otra área con el mismo nombre
-        $existingArea = Area::where('nombre', $request->nombre)
-                            ->where('id', '<>', $id) // Excluye el área actual
-                            ->first();
+                // Verifica si hay otra área con el mismo nombre
+                $existingArea = Area::where('nombre', $request->nombre)
+                                    ->where('id', '<>', $id) // Excluye el área actual
+                                    ->first();
 
-        if ($existingArea) {
-            toastr()->error('Ya existe un área con ese nombre.', 'Error');
-            return back()->withInput();
+                if ($existingArea) {
+                    toastr()->error('Ya existe un área con ese nombre.', 'Error');
+                    return back()->withInput();
+                }
+
+                // Valida los datos del formulario de edición
+                $request->validate([
+                    'nombre' => 'required|string|max:255|unique:areas,nombre,' . $id,
+                    'descripcion' => 'nullable|string|max:255',
+                ]);
+
+                
+
+                // Busca el área por su ID y actualiza los datos
+                $area = Area::findOrFail($id);
+                $area->update([
+                    'nombre' => $request->nombre,
+                    'descripcion' => $request->descripcion,
+                ]);
+
+                toastr()->success('Área actualizada correctamente', 'Notificación');
+
+                // Redirecciona a la página de áreas
+                return back();
+            }
+
+    public function destroy($id)
+        {
+            $area = Area::findOrFail($id);
+            $area->delete();
+
+            toastr()->success('Área eliminada correctamente', 'Notificación');
+
+            return back();
         }
-
-        // Busca el área por su ID y actualiza los datos
-        $area = Area::findOrFail($id);
-        $area->update([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-        ]);
-
-        toastr()->success('Área actualizada correctamente', 'Notificación');
-
-        // Redirecciona a la página de áreas
-        return redirect()->route('areas.index');
-    }
 
 }
 
