@@ -20,12 +20,12 @@ class RoleSeeder extends Seeder
 
         Permission:: create(['name' => 'home'])->syncRoles([$role1, $role2, $role3]);
 
-        Permission:: create(['name' => 'create_usuario.index'])->syncRoles([$role1, $role2, $role3]);
+        Permission:: create(['name' => 'create_usuario.index'])->syncRoles([$role1, $role2]);
         Permission:: create(['name' => 'create_usuario.create'])->syncRoles([$role1]);
         Permission:: create(['name' => 'create_usuario.editar'])->syncRoles([$role1]);
         Permission:: create(['name' => 'create_usuario.eliminar'])->syncRoles([$role1]);
 
-        Permission:: create(['name' => 'create_area.index'])->syncRoles([$role1, $role2, $role3]);
+        Permission:: create(['name' => 'create_area.index'])->syncRoles([$role1, $role2]);
         Permission:: create(['name' => 'create_area.create'])->syncRoles([$role1]);
         Permission:: create(['name' => 'create_area.editar'])->syncRoles([$role1]);
         Permission:: create(['name' => 'create_area.eliminar'])->syncRoles([$role1]);
@@ -36,7 +36,7 @@ class RoleSeeder extends Seeder
         Permission:: create(['name' => 'create_periodo.eliminar'])->syncRoles([$role1]);
 
         Permission:: create(['name' => 'documento.crear.index'])->syncRoles([$role1, $role2, $role3]);
-        Permission:: create(['name' => 'documento.crear.create'])->syncRoles([$role1]);
+        Permission:: create(['name' => 'documento.crear.create'])->syncRoles([$role1, $role2, $role3]);
         Permission:: create(['name' => 'documento.crear.editar'])->syncRoles([$role1]);
         Permission:: create(['name' => 'documento.crear.eliminar'])->syncRoles([$role1]);
     }

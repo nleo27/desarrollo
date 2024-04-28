@@ -12,9 +12,14 @@
     <div class="card mt-5">
         <div class="card-header">
             <h3 class="card-title">Lista de Usuarios</h3>
+            @can('create_usuario.create')
+
             <div class="card-tools">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-usuario">Registrar Usuario</button>
             </div>
+                
+            @endcan
+            
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -45,9 +50,14 @@
                                 <td>{{ $usuario->area ? $usuario->area->nombre : 'N/A' }}</td>
                                 <td>{{ $usuario->rol() }}</td>
                                 <td>
+                                    @can('create_usuario.editar')
                                     <a class="btn btn-success btn-sm" href="{{ route('usuarios.edit', ['id' => $usuario->id]) }}"><i class="fas fa-edit"></i> Editar</a>
+                                    @endcan
                                     
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-usuario"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                    @can('create_usuario.eliminar')
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-usuario"><i class="fas fa-trash-alt"></i> Eliminar</button>    
+                                    @endcan
+                                    
                                 </td>
                             </tr>
                         @endforeach

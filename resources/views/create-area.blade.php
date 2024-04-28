@@ -15,9 +15,11 @@
     <div class="card mt-5">
         <div class="card-header">
             <h3 class="card-title">Crear nueva area</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-area">Registrar Area</button>
-            </div>
+            @can('create_area.create')
+                <div class="card-tools">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-area">Registrar Area</button>
+                </div>
+            @endcan
         </div>
 
         <div class="card-body">
@@ -40,8 +42,13 @@
                             <td>{{ $area->descripcion }}</td>
                             
                             <td>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-area{{$area->id}}"><i class="fas fa-edit"></i> Editar</button>
+                                @can('create_area.editar')
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-area{{$area->id}}"><i class="fas fa-edit"></i> Editar</button>                                                                    
+                                @endcan
+                                
+                                @can('create_area.eliminar')
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirm-delete{{$area->id}}"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                @endcan
                             </td>
 
                             <!-- Modal Editar Area -->

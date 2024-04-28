@@ -15,9 +15,14 @@
     <div class="card mt-5">
         <div class="card-header">
             <h3 class="card-title">Crear Nuevo periodo</h3>
+            @can('create_periodo.create')
+
             <div class="card-tools">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-periodo">Registrar Nuevo periodo</button>
             </div>
+                
+            @endcan
+            
         </div>
 
         <div class="card-body">
@@ -46,7 +51,13 @@
                             
                             <td>
                             <a href="{{ route('seleccionar-periodo', ['id' => $periodo->id]) }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Seleccionar</a>
+                            
+                            @can('create_periodo.eliminar')
+
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-area"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                
+                            @endcan
+                                
                             </td>
                    
                     @endforeach     

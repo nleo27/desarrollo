@@ -74,9 +74,9 @@ class CreateUsuarioController extends Controller
     $usuario->email = $request->input('email-edit');
     $usuario->area_id = $request->input('area_id');
 
-    // Verificar si se ingresó una nueva contraseña
-    if ($request->has('password-edit')) {
-        $usuario->password = Hash::make($request->input('password-edit'));
+    // Actualizar la contraseña solo si se envía en el formulario
+    if ($request->filled('password-edit')) {
+        $usuario->password = Hash::make($request->input('password-edit')); // Usar Hash en lugar de bcrypt
     }
 
     $usuario->save();

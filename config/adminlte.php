@@ -198,7 +198,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-dark',//'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -265,6 +265,8 @@ return [
     'password_email_url' => 'password/email',
     'profile_url' => false,
 
+    
+
     /*
     |--------------------------------------------------------------------------
     | Laravel Mix
@@ -301,6 +303,10 @@ return [
             'topnav_right' => true,
         ],
         [
+            'type' => 'darkmode-widget',
+            'topnav_right' => true,     // Or "topnav => true" to place on the left.
+        ],
+        [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
@@ -319,27 +325,27 @@ return [
             'text' => 'Inicio',
             'url' => 'home',
             'icon' => 'fas fa-fw fa-home',
-            'can' => '',
+            'can' => 'home',
             
         ],
         [
             'text' => 'Crear Periodo',
             'url' => 'create-periodo',
             'icon' => 'fas fa-fw fa-clock',
-            'can' => '',
+            'can' => 'create_periodo.index',
         ],
         [
             'text' => 'Crear Usuario',
             'url' => 'create-usuario',
             'icon' => 'fas fa-fw fa-user',
-            'can' => '',
+            'can' => 'create_usuario.index',
         ],
 
         [
             'text' => 'Crear Area',
             'url' => 'create-area',
             'icon' => 'fas fa-fw fa-house-user',
-            'can' => '',
+            'can' => 'create_area.index',
         ],
 
         
