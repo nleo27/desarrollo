@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->boolean('periodo_activo')->default(false);
+            $table->bigInteger('id_usuario');
             $table->timestamps();
         });
     }
