@@ -15,10 +15,21 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Mi Unidad</h1>
+                    <h1 class="m-0">{{$carpeta->nombre}}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
+
+                        <div class="card-tools mr-3">
+                            <a href="{{url('/admin/mi_unidad')}}" class="btn btn-success"><i class="fas fa-solid fa-folder-open"></i>  Mi Unidad</a>
+                        </div>
+
+                        <div class="card-tools mr-3">
+                            <a href="#" onclick="history.back();" class="btn btn-danger">
+                                <i class="far fa-regular fa-hand-point-left"></i>  Regresar
+                            </a>
+                        </div>
+
                         <div class="card-tools">
                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-registrar-archivador"><i class="fas fa-solid fa-folder-plus"></i> Registrar Archivador</button>
                         </div>
@@ -39,8 +50,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('/admin/mi_unidad')}}" method="POST">
+                    <form action="{{url('/admin/mi_unidad/carpeta')}}" method="POST">
                         @csrf
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" value="{{$carpeta->id}}" name="carpeta_padre_id" hidden>
+                        </div>
                         <div class="form-group">
                             <label for="nombre">Nombre de Archivador</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -71,26 +86,24 @@
         </div>
     </div>
     <hr>
-    <h5>Mis Carpetas</h5>
+    <h5>Carpetas y Archivos</h5>
     <hr>
 
     <div class="row">
-        @foreach ($carpetas as $carpeta)
+        @foreach ($subcarpetas as $subcarpeta)
         <div class="col-md-3 col-sm-6 col-12">
-            
-            <div class="info-box" onclick="location.href='{{url('/admin/mi_unidad/carpeta', $carpeta->id)}}';" style="cursor: pointer;">
-                <span class="info-box-icon bg-info"><i class="fas fa-folder"></i></span>
+            <div class="info-box" onclick="location.href='{{url('/admin/mi_unidad/carpeta', $subcarpeta->id)}}';" style="cursor: pointer;">
+                <span class="info-box-icon bg-success"><i class="fas fa-folder"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-number">{{$carpeta->nombre}}</span>
+                    <span class="info-box-number">{{$subcarpeta->nombre}}</span>
                 </div>
                 <!-- Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton{{$carpeta->id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton{{$subcarpeta->id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{$carpeta->id}}" style="position: absolute; top: calc(100% - 25px); left: 20;">
-                        
-                        <a class="dropdown-item" href="#" onclick="openModal(event, {{$carpeta->id}})">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{$subcarpeta->id}}" style="position: absolute; top: calc(100% - 25px); left: 20;">
+                        <a class="dropdown-item" href="#" onclick="openModal(event, {{$subcarpeta->id}})">
                             <i class="fas fa-solid fa-pen"></i> Editar
                         </a>
                         
@@ -99,11 +112,9 @@
                 </div>
                 <!-- /Dropdown -->
             </div>
-            
-        </div>
 
-        <!-- Modal Editar Archivador -->
-            <div class="modal fade" id="modal-editar-archivador{{$carpeta->id}}">
+            <!-- Modal Editar Archivador -->
+            <div class="modal fade" id="modal-editar-archivador{{$subcarpeta->id}}">
                 <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Cambié modal-dialog a modal-lg para hacerlo más ancho -->
                     <div class="modal-content">
                         <div class="modal-header">
@@ -117,23 +128,23 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="nombre">Nombre de Archivador</label>
-                                    <input type="text" class="form-control"  value="{{$carpeta->nombre}}" id="nombre-edit" name="nombre-edit" required>
+                                    <input type="text" class="form-control" value="{{$subcarpeta->nombre}}" id="nombre-edit" name="nombre-edit" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="codigo">Código</label>
-                                    <input type="text" class="form-control" value="{{$carpeta->codigo}}" id="codigo-edit" name="codigo-edit" >
+                                    <input type="text" class="form-control" value="{{$subcarpeta->codigo}}" id="codigo-edit" name="codigo-edit" >
                                 </div>
                                 <div class="form-group">
                                     <label for="estante">Estante</label>
-                                    <input type="text" class="form-control" value="{{$carpeta->estante}}" id="estante-edit" name="estante-edit" >
+                                    <input type="text" class="form-control" value="{{$subcarpeta->estante}}" id="estante-edit" name="estante-edit" >
                                 </div>
                                 <div class="form-group">
                                     <label for="modulo">Módulo</label>
-                                    <input type="text" class="form-control" value="{{$carpeta->modulo}}" id="modulo-edit" name="modulo-edit" >
+                                    <input type="text" class="form-control" value="{{$subcarpeta->modulo}}" id="modulo-edit" name="modulo-edit" >
                                 </div>
                                 <div class="form-group">
                                     <label for="descripcion">Descripción</label>
-                                    <textarea class="form-control" id="descripcion-edit" name="descripcion-edit" rows="3" >{{$carpeta->descipcion}}</textarea>
+                                    <textarea class="form-control" id="descripcion-edit" name="descripcion-edit" rows="3" >{{$subcarpeta->descipcion}}</textarea>
                                 </div>
                                 <div class="modal-footer"> <!-- Añadí el modal-footer para los botones -->
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -146,9 +157,9 @@
             </div>
 
             <script>
-                document.getElementById('dropdownMenuButton{{$carpeta->id}}').onclick = function (event) {
+                document.getElementById('dropdownMenuButton{{$subcarpeta->id}}').onclick = function (event) {
                     event.stopPropagation();
-                    var dropdownMenu = document.getElementById('dropdownMenuButton{{$carpeta->id}}').nextElementSibling;
+                    var dropdownMenu = document.getElementById('dropdownMenuButton{{$subcarpeta->id}}').nextElementSibling;
                     dropdownMenu.classList.toggle('show');
                 };
                 // Cerrar el menú desplegable si haces clic fuera de él
@@ -167,19 +178,12 @@
                 function openModal(event, id) {
                 event.stopPropagation(); // Evitar la propagación del evento
                 $('#modal-editar-archivador'+id).modal('show'); // Abrir la ventana modal
-            }
-                
+                }
             </script>
+        </div>
         @endforeach
     </div>
 
-    
-    
-    
-    
-    
-    
-    
-    
+   
 
 @endsection

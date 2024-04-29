@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/usuarios/{id}', [CreateUsuarioController::class, 'update'])->name('usuarios.update');
     Route::get('/admin/mi_unidad', [CarpetaController::class, 'index'])->name('mi_unidad.index');
     Route::post('/admin/mi_unidad', [CarpetaController::class, 'store'])->name('mi_unidad.store');
+    Route::get('/admin/mi_unidad/carpeta/{id}', [CarpetaController::class, 'show'])->name('mi_unidad.carpeta');
+    Route::post('/admin/mi_unidad/carpeta', [CarpetaController::class, 'crear_subcarpeta'])->name('mi_unidad.carpeta.crear_subcarpeta');
 });
 
 

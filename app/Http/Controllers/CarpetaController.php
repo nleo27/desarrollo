@@ -12,7 +12,8 @@ class CarpetaController extends Controller
      */
     public function index()
     {
-        return view('admin.mi_unidad.index');
+        $carpeta = Carpeta::whereNull('carpeta_padre_id')->get();
+        return view('admin.mi_unidad.index', ['carpetas'=>$carpeta]);
     }
 
     /**
@@ -46,7 +47,7 @@ class CarpetaController extends Controller
         $carpeta->descipcion = $request->descripcion;
         $carpeta->save();
 
-        toastr()->success('Registro ingresado', 'Notificación');
+        toastr()->success('Se creo la carpeta corectamente', 'Notificación');
 
         return redirect()->route('mi_unidad.index');
     }
@@ -54,9 +55,11 @@ class CarpetaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $carpeta =Carpeta::findOrFail($id);
+        $subcarpetas = $carpeta->carpetasHijas;
+        return view('admin.mi_unidad.show', compact('carpeta', 'subcarpetas'));
     }
 
     /**
@@ -81,5 +84,32 @@ class CarpetaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function crear_subcarpeta(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|max:191',
+            'carpeta_padre_id' => 'required',
+            'modulo' => 'nullable|max:191',
+            'estante' => 'nullable|max:191',
+            'codigo' => 'nullable|max:191',
+            'descipcion' => 'nullable|max:191',
+            
+            
+        ]);
+
+        $carpeta = new Carpeta();
+        $carpeta->nombre = $request->nombre;
+        $carpeta->carpeta_padre_id = $request->carpeta_padre_id;
+        $carpeta->modulo = $request->modulo;
+        $carpeta->estante = $request->estante;
+        $carpeta->codigo = $request->codigo;
+        $carpeta->descipcion = $request->descripcion;
+        $carpeta->save();
+
+        toastr()->success('Se creo la Subcarpeta corectamente', 'Notificación');
+
+        return redirect()->back();
     }
 }
