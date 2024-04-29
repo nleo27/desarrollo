@@ -7,6 +7,7 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\RegistroUsuario;
+use App\Http\Controllers\CarpetaController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -31,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/areas/{id}', [AreasController::class, 'destroy'])->name('areas.destroy');
     Route::get('/usuarios/{id}/edit', [CreateUsuarioController::class, 'edit'])->name('usuarios.edit');
     Route::put('/usuarios/{id}', [CreateUsuarioController::class, 'update'])->name('usuarios.update');
+    Route::get('/admin/mi_unidad', [CarpetaController::class, 'index'])->name('mi_unidad.index');
+    Route::post('/admin/mi_unidad', [CarpetaController::class, 'store'])->name('mi_unidad.store');
 });
 
 

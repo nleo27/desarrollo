@@ -348,6 +348,13 @@ return [
             'can' => 'create_area.index',
         ],
 
+        [
+            'text' => 'Crear carpetas',
+            'url' => '/admin/mi_unidad',
+            'icon' => 'fas fa-fw fa-folder',
+            'can' => '',
+        ],
+
         
         ['header' => 'account_settings'],
         [
