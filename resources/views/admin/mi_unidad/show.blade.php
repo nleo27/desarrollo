@@ -60,26 +60,24 @@
 
                 
                 <!-- Área de Dropzone -->
-                <form action="{{url('/admin/mi_unidad/carpeta')}}" method="POST" class="dropzone" id="myDropzone" enctype="multipart/form-data">
+                <form action="{{ url('/admin/mi_unidad/upload-and-create') }}" method="POST" class="dropzone" id="myDropzone" enctype="multipart/form-data">
                     @csrf
-                    <input type="text" value="{{$carpeta->id}}" name="id" hidden>
+                    <input type="text" value="{{ $carpeta->id }}" name="id" hidden>
                     <div class="fallback">
-                        
                         <input type="file" name="file" multiple>
                     </div>
-                    
                 </form>
                 <!-- Fin del área de Dropzone -->
 
                 <!-- Formulario principal -->
-                <form action="{{url('/admin/mi_unidad/carpeta')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('/admin/mi_unidad/upload-and-create') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <input type="text" class="form-control" value="{{$carpeta->id}}" name="carpeta_padre_id" hidden>
+                        <input type="text" class="form-control" value="{{ $carpeta->id }}" name="carpeta_padre_id" hidden>
                     </div>
                     <div class="form-group">
-                        <label for="nombre">Nombre del Documento</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        <label for="nombre_archivo">Nombre del Documento</label>
+                        <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
                     </div>
                     <div class="form-group">
                         <label for="folios">N° Folios</label>
@@ -89,7 +87,6 @@
                         <label for="personal_dirigido">Personal Dirigido</label>
                         <input type="text" class="form-control" id="personal_dirigido" name="personal_dirigido">
                     </div>
-                   
                     <div class="form-group">
                         <label for="ubicacion">Ubicación</label>
                         <input type="text" class="form-control" id="ubicacion" name="ubicacion">

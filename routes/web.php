@@ -40,7 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/mi_unidad', [CarpetaController::class, 'update'])->name('mi_unidad.update');
 
     //RUTAS PARA ARCHIVOS
-    Route::post('/admin/mi_unidad/carpeta', [ArchivoController::class, 'upload'])->name('mi_unidad.archivo.upload');
+   
+
+    Route::post('/admin/mi_unidad/upload-and-create', [ArchivoController::class, 'uploadAndCreate'])->name('mi_unidad.archivo.uploadAndCreate');
 });
 
 

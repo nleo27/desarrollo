@@ -11,38 +11,31 @@ class ArchivoController extends Controller
      * Display a listing of the resource.
      */
 
-     public function upload(Request $request){
+     public function uploadAndCreate(Request $request){
         $id = $request->id;
-        $file = $request->file('file');
-        $fileName = time().'-'.$file->getClientOriginalName();
-        $request->file('file')->storeAs($id,$fileName, 'public');//cargar de forma publica
-        //$request->file('file')->storeAs($id,$fileName);//cargar de forma privada
-
-        $archivo =new Archivo();
-        $archivo->carpeta_id = $request->id;
-        $archivo->nombre = $fileName;
-            
-        $archivo->save();
-
-        toastr()->success('Se actualizó corectamente', 'Notificación');
-
+        
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            $file = $request->file('file');
+            $fileName = time().'-'.$file->getClientOriginalName();
+            $file->storeAs($id, $fileName, 'public');
+        
+            $archivo = new Archivo();
+            $archivo->carpeta_id = $id;
+            $archivo->nombre = $fileName;        
+            $archivo->nombre_archivo = $request->nombre_archivo;
+            $archivo->folio = $request->folios;
+            $archivo->personal_dirigido = $request->personal_dirigido;
+            $archivo->ubicacion = $request->ubicacion;
+            $archivo->descripcion = $request->descripcion;
+        
+            $archivo->save();
+        }
+    
         return redirect()->back();
-
     }
+  
 
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+  
     /**
      * Store a newly created resource in storage.
      */

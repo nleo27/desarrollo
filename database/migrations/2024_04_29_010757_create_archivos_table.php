@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('nombre')->nullable();
+            $table->string('nombre_archivo')->nullable();
             $table->string('folio')->nullable();
             $table->string('personal_dirigido')->nullable();
             $table->unsignedBigInteger('carpeta_id');
