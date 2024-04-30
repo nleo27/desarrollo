@@ -9,6 +9,9 @@
 @section('title', 'Carpetas')
 
 @section('content')
+
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
     
 
     <div class="content-header">     
@@ -30,6 +33,10 @@
                             </a>
                         </div>
 
+                        <div class="card-tools mr-3">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-documento"><i class="fas fas fa-file-upload"></i> Registrar Documento</button>
+                        </div>
+
                         <div class="card-tools">
                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-registrar-archivador"><i class="fas fa-solid fa-folder-plus"></i> Registrar Archivador</button>
                         </div>
@@ -38,6 +45,80 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Registrar Documentos -->
+<div class="modal fade" id="modal-registrar-documento">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Registrar Documentos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                
+                <!-- Área de Dropzone -->
+                <form action="{{url('/admin/mi_unidad/carpeta')}}" method="POST" class="dropzone" id="myDropzone" enctype="multipart/form-data">
+                    @csrf
+                    <input type="text" value="{{$carpeta->id}}" name="id" hidden>
+                    <div class="fallback">
+                        
+                        <input type="file" name="file" multiple>
+                    </div>
+                    
+                </form>
+                <!-- Fin del área de Dropzone -->
+
+                <!-- Formulario principal -->
+                <form action="{{url('/admin/mi_unidad/carpeta')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <input type="text" class="form-control" value="{{$carpeta->id}}" name="carpeta_padre_id" hidden>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre del Documento</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="folios">N° Folios</label>
+                        <input type="text" class="form-control" id="folios" name="folios">
+                    </div>
+                    <div class="form-group">
+                        <label for="personal_dirigido">Personal Dirigido</label>
+                        <input type="text" class="form-control" id="personal_dirigido" name="personal_dirigido">
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="ubicacion">Ubicación</label>
+                        <input type="text" class="form-control" id="ubicacion" name="ubicacion">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                     
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Crear Archivo</button>
+                    </div>
+                </form>
+                <!-- Fin del formulario principal -->
+
+               
+            </div>
+            <script>
+                Dropzone.options.myDropzone = {
+
+                    paramName: "file", // The name that will be used to transfer the file
+                    dictDefaultMessage: "Arrastra y suelta el archivo o haz click aquí",
+                    maxFilesize: 2, // MB
+                };
+            </script>
+        </div>
+    </div>
+</div>
 
     <!-- Modal Registrar Archivador -->
     <div class="modal fade" id="modal-registrar-archivador">
@@ -50,7 +131,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('/admin/mi_unidad/carpeta')}}" method="POST">
+                    <form action="{{url('/admin/mi_unidad/carpeta')}}" method="get">
                         @csrf
                         <div class="form-group">
                             
@@ -93,7 +174,7 @@
         @foreach ($subcarpetas as $subcarpeta)
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box">
-                <a href="{{url('/admin/mi_unidad/carpeta', $subcarpeta->id)}}" class="info-box" style="text-decoration: none; box-shadow: none;">
+                <a href="{{url('/admin/mi_unidad/carpeta', $subcarpeta->id)}}" class="info-box" style="text-decoration: none; box-shadow: none;color: inherit;">
                     <span class="info-box-icon bg-success"><i class="fas fa-folder"></i></span>
                     <div class="info-box-content" style="color: black;">
                         <span class="info-box-text">{{$subcarpeta->nombre}}</span>
@@ -129,29 +210,31 @@
                         <div class="modal-body">
                             <form action="{{url('/admin/mi_unidad')}}" method="POST">
                                 @csrf
+                                @method('PUT')
+                                <input type="text" value="{{$subcarpeta->id}}" name="id" hidden >
                                 <div class="form-group">
                                     <label for="nombre">Nombre de Archivador</label>
-                                    <input type="text" class="form-control" value="{{$subcarpeta->nombre}}" id="nombre-edit" name="nombre-edit" required>
+                                    <input type="text" class="form-control" value="{{$subcarpeta->nombre}}" id="nombre" name="nombre" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="codigo">Código</label>
-                                    <input type="text" class="form-control" value="{{$subcarpeta->codigo}}" id="codigo-edit" name="codigo-edit" >
+                                    <input type="text" class="form-control" value="{{$subcarpeta->codigo}}" id="codigo" name="codigo" >
                                 </div>
                                 <div class="form-group">
                                     <label for="estante">Estante</label>
-                                    <input type="text" class="form-control" value="{{$subcarpeta->estante}}" id="estante-edit" name="estante-edit" >
+                                    <input type="text" class="form-control" value="{{$subcarpeta->estante}}" id="estante" name="estante" >
                                 </div>
                                 <div class="form-group">
                                     <label for="modulo">Módulo</label>
-                                    <input type="text" class="form-control" value="{{$subcarpeta->modulo}}" id="modulo-edit" name="modulo-edit" >
+                                    <input type="text" class="form-control" value="{{$subcarpeta->modulo}}" id="modulo" name="modulo" >
                                 </div>
                                 <div class="form-group">
                                     <label for="descripcion">Descripción</label>
-                                    <textarea class="form-control" id="descripcion-edit" name="descripcion-edit" rows="3" >{{$subcarpeta->descipcion}}</textarea>
+                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" >{{$subcarpeta->descipcion}}</textarea>
                                 </div>
                                 <div class="modal-footer"> <!-- Añadí el modal-footer para los botones -->
-                                    <button type="button" class="btn btn-success" data-dismiss="modal">Actualizar</button>
-                                    <button type="submit" class="btn btn-primary">Crear Carpeta</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-success">Actualizar</button>
                                 </div>
                             </form>
                         </div>

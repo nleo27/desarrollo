@@ -74,14 +74,14 @@
     <h5>Mis Carpetas</h5>
     <hr>
 
-    <div class="row">
+    <div class="row" >
         @foreach ($carpetas as $carpeta)
-        <div class="col-md-3 col-sm-6 col-12">
+        <div class="col-md-3 col-sm-6 col-12" data-toggle="tooltip" data-placement="bottom" title="{{$carpeta->nombre}}">
             
-            <div class="info-box">
-                <a href="{{url('/admin/mi_unidad/carpeta', $carpeta->id)}}" class="info-box" style="text-decoration: none; box-shadow: none;">
+            <div class="info-box" >
+                <a href="{{url('/admin/mi_unidad/carpeta', $carpeta->id)}}" class="info-box" style="text-decoration: none; box-shadow: none; color: inherit;">
                     <span class="info-box-icon bg-info"><i class="fas fa-folder"></i></span>
-                    <div class="info-box-content" style="color: black;">
+                    <div class="info-box-content" >
                         <span class="info-box-text">{{$carpeta->nombre}}</span>
                     </div>
                 </a>
@@ -117,25 +117,27 @@
                         <div class="modal-body">
                             <form action="{{url('/admin/mi_unidad')}}" method="POST">
                                 @csrf
+                                @method('PUT')
+                                <input type="text" value="{{$carpeta->id}}" name="id" hidden>
                                 <div class="form-group">
                                     <label for="nombre">Nombre de Archivador</label>
-                                    <input type="text" class="form-control"  value="{{$carpeta->nombre}}" id="nombre-edit" name="nombre-edit" required>
+                                    <input type="text" class="form-control"  value="{{$carpeta->nombre}}" id="nombre" name="nombre" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="codigo">Código</label>
-                                    <input type="text" class="form-control" value="{{$carpeta->codigo}}" id="codigo-edit" name="codigo-edit" >
+                                    <input type="text" class="form-control" value="{{$carpeta->codigo}}" id="codigo" name="codigo" >
                                 </div>
                                 <div class="form-group">
                                     <label for="estante">Estante</label>
-                                    <input type="text" class="form-control" value="{{$carpeta->estante}}" id="estante-edit" name="estante-edit" >
+                                    <input type="text" class="form-control" value="{{$carpeta->estante}}" id="estante" name="estante" >
                                 </div>
                                 <div class="form-group">
                                     <label for="modulo">Módulo</label>
-                                    <input type="text" class="form-control" value="{{$carpeta->modulo}}" id="modulo-edit" name="modulo-edit" >
+                                    <input type="text" class="form-control" value="{{$carpeta->modulo}}" id="modulo" name="modulo" >
                                 </div>
                                 <div class="form-group">
                                     <label for="descripcion">Descripción</label>
-                                    <textarea class="form-control" id="descripcion-edit" name="descripcion-edit" rows="3" >{{$carpeta->descipcion}}</textarea>
+                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" >{{$carpeta->descipcion}}</textarea>
                                 </div>
                                 <div class="modal-footer"> <!-- Añadí el modal-footer para los botones -->
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

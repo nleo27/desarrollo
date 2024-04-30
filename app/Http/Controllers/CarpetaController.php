@@ -73,9 +73,42 @@ class CarpetaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        //$datos = request()->all();
+       // return response()->json($datos);
+
+       if(empty($request->nombre)) {
+        toastr()->error('El campo nombre no puede estar vacío. Por favor ingrese un nombre válido.', 'Error');
+        return redirect()->back()->withInput();
+    }
+       
+       $request->validate([
+        'nombre' => 'required|max:191',
+        'modulo' => 'nullable|max:191',
+        'estante' => 'nullable|max:191',
+        'codigo' => 'nullable|max:191',
+        'descipcion' => 'nullable|max:191',
+   
+        ], [
+            'nombre.required' => 'El campo nombre no puede estar vacío. Por favor ingrese un nombre válido.',
+        ]);
+
+        // Verificar si el nombre de la carpeta está vacío
+   
+
+        $id= $request->id;
+        $carpeta = Carpeta::find($id);
+        $carpeta->nombre = $request->nombre;
+        $carpeta->modulo = $request->modulo;
+        $carpeta->estante = $request->estante;
+        $carpeta->codigo = $request->codigo;
+        $carpeta->descipcion = $request->descripcion;
+        $carpeta->save();
+
+        toastr()->success('Se actualizó corectamente', 'Notificación');
+
+        return redirect()->back();
     }
 
     /**

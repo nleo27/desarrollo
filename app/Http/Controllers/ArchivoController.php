@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Archivo;
 use Illuminate\Http\Request;
 
 class ArchivoController extends Controller
@@ -9,6 +10,26 @@ class ArchivoController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     public function upload(Request $request){
+        $id = $request->id;
+        $file = $request->file('file');
+        $fileName = time().'-'.$file->getClientOriginalName();
+        $request->file('file')->storeAs($id,$fileName, 'public');//cargar de forma publica
+        //$request->file('file')->storeAs($id,$fileName);//cargar de forma privada
+
+        $archivo =new Archivo();
+        $archivo->carpeta_id = $request->id;
+        $archivo->nombre = $fileName;
+            
+        $archivo->save();
+
+        toastr()->success('Se actualizó corectamente', 'Notificación');
+
+        return redirect()->back();
+
+    }
+
     public function index()
     {
         //
