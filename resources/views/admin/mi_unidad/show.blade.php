@@ -92,22 +92,25 @@
     <div class="row">
         @foreach ($subcarpetas as $subcarpeta)
         <div class="col-md-3 col-sm-6 col-12">
-            <div class="info-box" onclick="location.href='{{url('/admin/mi_unidad/carpeta', $subcarpeta->id)}}';" style="cursor: pointer;">
-                <span class="info-box-icon bg-success"><i class="fas fa-folder"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-number">{{$subcarpeta->nombre}}</span>
-                </div>
+            <div class="info-box">
+                <a href="{{url('/admin/mi_unidad/carpeta', $subcarpeta->id)}}" class="info-box" style="text-decoration: none; box-shadow: none;">
+                    <span class="info-box-icon bg-success"><i class="fas fa-folder"></i></span>
+                    <div class="info-box-content" style="color: black;">
+                        <span class="info-box-text">{{$subcarpeta->nombre}}</span>
+                    </div>
+                </a>
                 <!-- Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton{{$subcarpeta->id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{$subcarpeta->id}}" style="position: absolute; top: calc(100% - 25px); left: 20;">
-                        <a class="dropdown-item" href="#" onclick="openModal(event, {{$subcarpeta->id}})">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-editar-archivador{{$subcarpeta->id}}">
                             <i class="fas fa-solid fa-pen"></i> Editar
                         </a>
-                        
-                        <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Eliminar</a>
+                        <a class="dropdown-item" href="#" id="eliminar">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </a>
                     </div>
                 </div>
                 <!-- /Dropdown -->
@@ -147,7 +150,7 @@
                                     <textarea class="form-control" id="descripcion-edit" name="descripcion-edit" rows="3" >{{$subcarpeta->descipcion}}</textarea>
                                 </div>
                                 <div class="modal-footer"> <!-- Añadí el modal-footer para los botones -->
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-success" data-dismiss="modal">Actualizar</button>
                                     <button type="submit" class="btn btn-primary">Crear Carpeta</button>
                                 </div>
                             </form>
@@ -156,33 +159,12 @@
                 </div>
             </div>
 
-            <script>
-                document.getElementById('dropdownMenuButton{{$subcarpeta->id}}').onclick = function (event) {
-                    event.stopPropagation();
-                    var dropdownMenu = document.getElementById('dropdownMenuButton{{$subcarpeta->id}}').nextElementSibling;
-                    dropdownMenu.classList.toggle('show');
-                };
-                // Cerrar el menú desplegable si haces clic fuera de él
-                window.onclick = function(event) {
-                    if (!event.target.matches('.dropdown-toggle')) {
-                        var dropdowns = document.getElementsByClassName("dropdown-menu");
-                        for (var i = 0; i < dropdowns.length; i++) {
-                            var openDropdown = dropdowns[i];
-                            if (openDropdown.classList.contains('show')) {
-                                openDropdown.classList.remove('show');
-                            }
-                        }
-                    }
-                }
-
-                function openModal(event, id) {
-                event.stopPropagation(); // Evitar la propagación del evento
-                $('#modal-editar-archivador'+id).modal('show'); // Abrir la ventana modal
-                }
-            </script>
+            
         </div>
         @endforeach
     </div>
+
+    
 
    
 
