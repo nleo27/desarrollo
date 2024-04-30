@@ -12,7 +12,66 @@
 
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-    
+<style>
+    .wrapper{
+  
+        
+    }
+
+    .box{
+        max-width: 500px;
+        background: yellow;
+        padding: 30px;
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .upload-area-title{
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .uploadlabel{
+        width: 100%;
+        min-height: 100px;
+        background: #18a7ff0d;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 3px dashed #18a7ff82;
+        cursor: pointer;
+    }
+    .uploadlabel span{
+        font-size: 70px;
+        color: #18a7ff;
+    }
+
+    .uploadlabel p{
+        color: #18a7ff;
+        font-size: 20px;
+        font-weight: 800;
+        font-family: cursive;
+    }
+
+    .uploaded{
+        margin: 30px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #a5a5a5;
+    }
+
+   .showfilebox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px 15px;
+    box-shadow: #0000000d 0px 0px 0px 1px, #d1d5db3d 0px 0px 0px 1px inset;
+   } 
+</style>
 
     <div class="content-header">     
         <div class="container-fluid">
@@ -57,6 +116,44 @@
                 </button>
             </div>
             <div class="modal-body">
+
+                <div class="wrapper">
+                    <div class="box">
+                        <div class="input-bx">
+
+                            <h2 class="upload-area-title">Subir Archivos</h2>
+
+                            <form action="">
+                                <input type="file" id="upload" accept=".doc, .docx, .pdf, .jpeg, .png, jpg" hidden>
+                                <label for="upload" class="uploadlabel">
+                                    <span><i class="fas fa-upload"></i></span>
+                                    <p> Click aqui</p>
+                                </label>
+                                
+                                
+                            </form>
+
+                        </div>
+
+                        <div id="filewrapper">
+                            <h3 class="uploaded">Documentos subidos</h3>
+                            <div class=" showfilebox">
+                                <div class="left">
+                                    <span class="filetype">Pdf</span>
+                                    <h3>Ravi Web.pdf</h3>
+
+                                </div>
+                                <div class="right">
+                                    <span>&#215;</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
                 
                 <!-- Área de Dropzone -->
