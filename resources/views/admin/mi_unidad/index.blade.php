@@ -153,45 +153,5 @@
         @endforeach
     </div>
 
-    <div class="row">
-        
-        <div class="col-md-3 col-sm-6 col-12">
-            <div class="info-box">
-                <a href="#" class="info-box" style="text-decoration: none; box-shadow: none;">
-                    <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-                    <div class="info-box-content" style="color: black;">
-                        <span class="info-box-text">Messages</span>
-                        
-                    </div>
-                </a>
-                <!-- Dropdown -->
-                <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" id="editar">
-                            <i class="fas fa-solid fa-pen"></i> Editar
-                        </a>
-                        <a class="dropdown-item" href="#" id="eliminar">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </a>
-                    </div>
-                </div>
-                <!-- /Dropdown -->
-            </div>
-        </div>
-        
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    
-    
 
 @endsection
