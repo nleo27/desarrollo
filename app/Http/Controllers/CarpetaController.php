@@ -59,7 +59,8 @@ class CarpetaController extends Controller
     {
         $carpeta =Carpeta::findOrFail($id);
         $subcarpetas = $carpeta->carpetasHijas;
-        return view('admin.mi_unidad.show', compact('carpeta', 'subcarpetas'));
+        $archivos = $carpeta->archivos;
+        return view('admin.mi_unidad.show', compact('carpeta', 'subcarpetas', 'archivos'));
     }
 
     /**

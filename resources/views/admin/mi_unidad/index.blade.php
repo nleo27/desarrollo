@@ -92,10 +92,10 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-editar-archivador{{$carpeta->id}}">
-                            <i class="fas fa-solid fa-pen"></i> Editar
+                            <i class="fas fa-solid fa-pen text-warning"></i> Editar
                         </a>
                         <a class="dropdown-item" href="#" id="eliminar">
-                            <i class="fas fa-trash"></i> Eliminar
+                            <i class="fas fa-trash text-danger"></i> Eliminar
                         </a>
                     </div>
                 </div>

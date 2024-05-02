@@ -6,6 +6,8 @@ use App\Models\Archivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Carpeta;
+use Yajra\DataTables\Facades\DataTables;
 
 class ArchivoController extends Controller
 {
@@ -71,38 +73,6 @@ class ArchivoController extends Controller
     }
   
 
-  
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -111,4 +81,17 @@ class ArchivoController extends Controller
     {
         //
     }
+
+    public function getArchivos($id)
+        {
+            $archivos = Archivo::select('id', 'nombre', 'nombre_archivo')->where('carpeta_id', $id)->get();
+
+            // Agrega la URL del archivo a cada archivo en la colección
+            $archivos->transform(function ($archivo) use ($id) {
+                $archivo->url = asset('storage/' . $id . '/' . $archivo->nombre);
+                return $archivo;
+            });
+
+            return DataTables::collection($archivos)->toJson();
+        }
 }

@@ -6,15 +6,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap4.css">
+    
 @endsection
 
 @section('title', 'Carpetas')
 
 @section('content')
 
-        <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-        <style>
+        
+        
+    <style>
             .wrapper{
                 width: 100%
                 
@@ -65,23 +66,23 @@
                 color: #a5a5a5;
             }
 
-        .showfilebox {
+            .showfilebox {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 10px 0;
             padding: 10px 15px;
             box-shadow: #0000000d 0px 0px 0px 1px, #d1d5db3d 0px 0px 0px 1px inset;
-        } 
+            } 
 
-        .showfilebox .left {
+            .showfilebox .left {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
-        }
+            }
 
-        .filetype{
+            .filetype{
             background: #18a7ff;
             color: #fff;
             padding: 5px 15px;
@@ -89,14 +90,14 @@
             text-transform: capitalize;
             font-weight: 700;
             border-radius: 3px;
-        }
-        .left h3{
+            }
+            .left h3{
             font-weight: 600;
             font-size: 18px;
             color: #292f42;
             margin:0;
-        }
-        .right span{
+            }
+            .right span{
             background: #18a7ff;
             color: #fff;
             width: 25px;
@@ -108,8 +109,8 @@
             font-weight: 700;
             cursor: pointer;
             border-radius: 50%;
-        }
-        </style>
+            }
+    </style>
 
         <div class="content-header">     
             <div class="container-fluid">
@@ -117,25 +118,25 @@
                     <div class="col-sm-6">
                         <h1 class="m-0">{{$carpeta->nombre}}</h1>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <ol class="breadcrumb float-sm-right">
 
-                            <div class="card-tools mr-3">
+                            <div class="card-tools mr-1">
                                 <a href="{{url('/admin/mi_unidad')}}" class="btn btn-success"><i class="fas fa-solid fa-folder-open"></i>  Mi Unidad</a>
                             </div>
 
-                            <div class="card-tools mr-3">
+                            <div class="card-tools mr-1">
                                 <a href="#" onclick="history.back();" class="btn btn-danger">
                                     <i class="far fa-regular fa-hand-point-left"></i>  Regresar
                                 </a>
                             </div>
 
-                            <div class="card-tools mr-3">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-documento"><i class="fas fas fa-file-upload"></i> Registrar Documento</button>
+                            <div class="card-tools mr-1">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-documento"><i class="fas fas fa-file-upload"></i> Agregar Documento</button>
                             </div>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-registrar-archivador"><i class="fas fa-solid fa-folder-plus"></i> Registrar Archivador</button>
+                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-registrar-archivador"><i class="fas fa-solid fa-folder-plus"></i> Agregar Archivador</button>
                             </div>
                         </ol>
                     </div>
@@ -321,10 +322,10 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-editar-archivador{{$subcarpeta->id}}">
-                                <i class="fas fa-solid fa-pen"></i> Editar
+                                <i class="fas fa-solid fa-pen text-warning"></i> Editar
                             </a>
                             <a class="dropdown-item" href="#" id="eliminar">
-                                <i class="fas fa-trash"></i> Eliminar
+                                <i class="fas fa-trash text-danger"></i> Eliminar
                             </a>
                         </div>
                     </div>
@@ -382,32 +383,65 @@
         </div>
 
         <hr>
-        
+        <!-- Tabla de lista de archivos -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center" id="lista-documentos">
+                <table class="table table-bordered table-striped text-center table-hover" id="lista-documentos">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Descripcion</th>
+                            <th>Título</th>
+                            <th>Nombre del archivo</th>
                             <th>Acciones</th>
+                            
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>01</td>
-                            <td>Informe 2024</td>
-                            <td>Muni</td>
-                            <td>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-file"><i class="fas fa-edit"></i> Editar</button>                                                                    
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash-alt"></i> Eliminar</button>
-                            </td>
-                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
         </div>
+
+      <!-- Modal -->
+    <div class="modal fade" id="ver_archivo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Detalle de Archivo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align: center" id="modal-body-content">
+                    <div id="archivo-info"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#ver_archivo_modal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);
+                    var archivoData = button.data('info');
+                    console.log(archivoData);
+                    var modal = $(this);
+                    modal.find('.modal-body #archivo-info').html(`
+                        <h5>${archivoData.nombre}</h5>
+                        <h5>${archivoData.id}</h5>
+                        <p>Nombre del Archivo: ${archivoData.nombre_archivo}</p>
+                        <!-- Puedes continuar mostrando otros detalles del archivo aquí -->
+                    `);
+                });
+            });
+        </script>
+
+    
         
   
 
@@ -415,30 +449,113 @@
 
 @section('js')
 
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap4.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap4.js"></script>
 
 <script>
-    new DataTable('#lista-documentos',{
-        responsive: true,
-        autoWidth: false,
+    var carpetaId = "{{ $carpeta->id }}";
 
-        "language": {
-            "lengthMenu": "Ver _MENU_ registros por página",
-            "zeroRecords": "Nada encontrado - disculpa",
-            "info": "Estas en la página _PAGE_ de _PAGES_",
-            "infoEmpty": "No records available",
-            "infoFiltered": "(filtrado de _MAX_ registros totales)",
-            "search": "Buscar"
-        }
+    $(document).ready(function() {
+        $('#lista-documentos').DataTable({
+            responsive: true,
+            autoWidth: false,
+            ajax: '{{ route("archivos", ["id" => ":carpetaId"]) }}'.replace(':carpetaId', carpetaId),
+            columns: [
+                { data: 'id' },
+                { 
+                    data: 'nombre',
+                    render: function(data, type, row) {
+                        var extension = data.split('.').pop().toLowerCase();
+                        var icono = '';
+
+                        if (extension === 'png' || extension === 'jpg' || extension === 'jpeg') {
+                            icono = '<img src="{{ url("/imagenes/iconos/imagen01.png") }}" width="25px">';
+                        } else if (extension === 'pdf') {
+                            icono = '<img src="{{ url("/imagenes/iconos/pdf.png") }}" width="25px">';
+                        } else if (extension === 'docx' || extension === 'doc') {
+                            icono = '<img src="{{ url("/imagenes/iconos/palabra.png") }}" width="25px">';
+                        } else if (extension === 'xlsx') {
+                            icono = '<img src="{{ url("/imagenes/iconos/excel.png") }}" width="25px">';
+                        }
+
+                        return icono + data;
+                    }
+                },
+                { data: 'nombre_archivo' },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        return `
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle" type="button" id="accionesButton${data.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Opciones
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="accionesButton${data.id}">
+                                    <a href="#" class="dropdown-item ver-archivo" data-toggle="modal" data-target="#ver_archivo_modal" data-info='${JSON.stringify(data)}'><i class="fas fa-eye text-info"></i> Ver</a>
+                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#edit-file${data.id}"><i class="fas fa-edit text-warning"></i> Editar</button>
+                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#confirm-delete${data.id}"><i class="fas fa-trash-alt text-danger"></i> Eliminar</button>
+                                    <a href="{{ asset('storage/${carpetaId}/${data.nombre}') }}" class="dropdown-item" download><i class="fas fa-file-download text-secondary"></i> Descargar</a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            "language": {
+                "lengthMenu": "Ver _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado - disculpa",
+                "info": "Estás en la página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "search": "Buscar"
+            }
+        });
+
+        // Evento de clic para abrir el modal
+        $('#lista-documentos').on('click', '.ver-archivo', function() {
+            var archivoData = $(this).data('info');
+
+            // Actualizar el título del modal
+            $('#exampleModalLongTitle').text(archivoData.nombre);
+
+            // Obtener la extensión del archivo después de que se ha construido el HTML
+            var nombreArchivo = archivoData.nombre;
+            var extension = nombreArchivo.split('.').pop().toLowerCase();
+
+            // Limpiar el contenido anterior del cuerpo del modal
+            $('#modal-body-content').empty();
+
+            // Mostrar la información del archivo en el cuerpo del modal
+            var modalBodyContent = '';
+
+            if (extension === "png" || extension === "jpg" || extension === "jpeg") {
+                modalBodyContent += '<img src="' + archivoData.url + '" width="100%">';
+            } else if (extension === "pdf") {
+                modalBodyContent += '<iframe src="' + archivoData.url + '" width="100%" height="420px"></iframe>';
+            } else if (extension === "docx" || extension === "doc") {
+                modalBodyContent += '<img src="{{asset("imagenes/iconos/palabra.png")}}" width="20%"><br><br>';
+                modalBodyContent += '<a href="' + archivoData.url + '" class="btn btn-success btn-lg mb-1"><i class="fas fa-file-download"></i> Descargar</a>';
+            } else if (extension === "xlsx") {
+                modalBodyContent += '<img src="{{asset("imagenes/iconos/excel.png")}}" width="20%"><br><br>';
+                modalBodyContent += '<a href="' + archivoData.url + '" class="btn btn-success btn-lg mb-1"><i class="fas fa-file-download"></i> Descargar</a>';
+            }
+
+            $('#modal-body-content').append(modalBodyContent);
+
+            
+        });
     });
-
-    
 </script>
+
+
+
+
+
 
 @endsection

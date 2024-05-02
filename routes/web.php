@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
    
 
     Route::post('/admin/mi_unidad/upload-and-create', [ArchivoController::class, 'uploadAndCreate'])->name('mi_unidad.archivo.uploadAndCreate');
+    Route::get('/admin/mi_unidad/carpeta/{id}/archivos', [ArchivoController::class, 'getArchivos'])->name('archivos');
 });
 
 

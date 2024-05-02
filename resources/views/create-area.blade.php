@@ -50,6 +50,7 @@
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirm-delete{{$area->id}}"><i class="fas fa-trash-alt"></i> Eliminar</button>
                                 @endcan
                             </td>
+                        </tr>
 
                             <!-- Modal Editar Area -->
                             <div class="modal fade" id="edit-area{{$area->id}}">
@@ -144,9 +145,10 @@
 @endsection
 
 @section('js')
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap4.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
@@ -198,7 +200,7 @@
 
     
 
- </script>
+</script>
 
  
 @endsection
