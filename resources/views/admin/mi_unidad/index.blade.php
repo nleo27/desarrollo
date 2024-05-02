@@ -41,6 +41,7 @@
                 <div class="modal-body">
                     <form action="{{url('/admin/mi_unidad')}}" method="POST">
                         @csrf
+                        <input type="text" class="form-control" id="user_id" name="user_id" value="{{Auth::user()->id}}" hidden>
                         <div class="form-group">
                             <label for="nombre">Nombre de Archivador</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>

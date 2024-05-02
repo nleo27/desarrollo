@@ -47,17 +47,21 @@ class ArchivoController extends Controller
             if ($file->isValid()) {
                 $fileName = time() . '-' . $file->getClientOriginalName();
     
-                // Crear la carpeta si no existe
+                /*Crear la carpeta si no existe de forma public
                 $carpetaPath = $carpetaId;
                 Storage::disk('public')->makeDirectory($carpetaPath);
     
-                // Guardar el archivo en la carpeta
-                $file->storeAs('public/' . $carpetaPath, $fileName);
+                Guardar el archivo en la carpeta
+                $file->storeAs('public/' . $carpetaPath, $fileName);//Guarda de forma publica*/
+
+                $file->storeAs($carpetaId, $fileName); // Guarda de forma privada
+
     
                 // Guardar los datos en la base de datos
                 $archivo = new Archivo();
                 $archivo->carpeta_id = $carpetaId;
                 $archivo->nombre = $fileName;
+                $archivo->estado_archivo = 'privado';
                 $archivo->nombre_archivo = $request->nombre_archivo;
                 $archivo->folio = $request->folios;
                 $archivo->personal_dirigido = $request->personal_dirigido;
@@ -83,15 +87,16 @@ class ArchivoController extends Controller
     }
 
     public function getArchivos($id)
-        {
-            $archivos = Archivo::select('id', 'nombre', 'nombre_archivo')->where('carpeta_id', $id)->get();
-
-            // Agrega la URL del archivo a cada archivo en la colección
-            $archivos->transform(function ($archivo) use ($id) {
-                $archivo->url = asset('storage/' . $id . '/' . $archivo->nombre);
-                return $archivo;
-            });
-
-            return DataTables::collection($archivos)->toJson();
-        }
+    {
+        $archivos = Archivo::select('id', 'nombre', 'nombre_archivo')->where('carpeta_id', $id)->get();
+    
+        // Agrega la URL del archivo a cada archivo en la colección
+        $archivos->transform(function ($archivo) use ($id) {
+            $rutaArchivo = 'storage/' . $id . '/' . $archivo->nombre;
+            $archivo->url = asset($rutaArchivo); // Genera la URL correcta para el almacenamiento privado
+            return $archivo;
+        });
+    
+        return DataTables::collection($archivos)->toJson();
+    }
 }

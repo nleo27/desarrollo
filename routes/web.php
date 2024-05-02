@@ -9,6 +9,7 @@ use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\RegistroUsuario;
 use App\Http\Controllers\CarpetaController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -44,7 +45,24 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/admin/mi_unidad/upload-and-create', [ArchivoController::class, 'uploadAndCreate'])->name('mi_unidad.archivo.uploadAndCreate');
     Route::get('/admin/mi_unidad/carpeta/{id}/archivos', [ArchivoController::class, 'getArchivos'])->name('archivos');
+
+    
+   
 });
+
+ //RUTA PARA MOSTRAR ARCHIVOS PRIVADOS
+
+ Route::get('storage/{carpeta}/{archivo}', function($carpeta, $archivo){
+
+    if (Auth::check()) {
+        $path =storage_path('app'.DIRECTORY_SEPARATOR. $carpeta .DIRECTORY_SEPARATOR. $archivo);
+        return response()->file($path);
+    }else{
+        abort(403, 'No tiene permiso para acceder a este archivo');
+    }
+
+    
+})->name('mostrar.archivos.privados');
 
 
 

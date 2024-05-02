@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Carpeta;
+use Illuminate\Support\Facades\Auth;
 
 class CarpetaController extends Controller
 {
@@ -12,7 +13,11 @@ class CarpetaController extends Controller
      */
     public function index()
     {
-        $carpeta = Carpeta::whereNull('carpeta_padre_id')->get();
+        $id_user = Auth::user()->id;
+        $carpeta = Carpeta::whereNull('carpeta_padre_id')
+                    ->where('user_id', $id_user)
+                    ->get();
+
         return view('admin.mi_unidad.index', ['carpetas'=>$carpeta]);
     }
 
@@ -41,6 +46,7 @@ class CarpetaController extends Controller
 
         $carpeta = new Carpeta();
         $carpeta->nombre = $request->nombre;
+        $carpeta->user_id = $request->user_id;
         $carpeta->modulo = $request->modulo;
         $carpeta->estante = $request->estante;
         $carpeta->codigo = $request->codigo;
@@ -135,6 +141,7 @@ class CarpetaController extends Controller
 
         $carpeta = new Carpeta();
         $carpeta->nombre = $request->nombre;
+        $carpeta->user_id = $request->user_id;
         $carpeta->carpeta_padre_id = $request->carpeta_padre_id;
         $carpeta->modulo = $request->modulo;
         $carpeta->estante = $request->estante;

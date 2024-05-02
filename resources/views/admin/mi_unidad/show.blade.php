@@ -271,6 +271,7 @@
                             <div class="form-group">
                                 
                                 <input type="text" class="form-control" value="{{$carpeta->id}}" name="carpeta_padre_id" hidden>
+                                <input type="text" class="form-control" value="{{Auth::user()->id}}" name="user_id" hidden>
                             </div>
                             <div class="form-group">
                                 <label for="nombre">Nombre de Archivador</label>
@@ -501,6 +502,8 @@
                                     <button type="button" class="dropdown-item" data-toggle="modal" data-target="#edit-file${data.id}"><i class="fas fa-edit text-warning"></i> Editar</button>
                                     <button type="button" class="dropdown-item" data-toggle="modal" data-target="#confirm-delete${data.id}"><i class="fas fa-trash-alt text-danger"></i> Eliminar</button>
                                     <a href="{{ asset('storage/${carpetaId}/${data.nombre}') }}" class="dropdown-item" download><i class="fas fa-file-download text-secondary"></i> Descargar</a>
+                                    <a href="#" class="dropdown-item ver-archivo" data-toggle="modal" data-target="#ver_archivo_modal" data-info=''><i class="fas fa-share-alt text-primary"></i> Compartir</a>
+                                    
                                 </div>
                             </div>
                         `;
@@ -535,7 +538,7 @@
             var modalBodyContent = '';
 
             if (extension === "png" || extension === "jpg" || extension === "jpeg") {
-                modalBodyContent += '<img src="' + archivoData.url + '" width="100%">';
+                modalBodyContent += `<img src="${archivoData.url}" width="100%" alt="Imagen">`;
             } else if (extension === "pdf") {
                 modalBodyContent += '<iframe src="' + archivoData.url + '" width="100%" height="420px"></iframe>';
             } else if (extension === "docx" || extension === "doc") {

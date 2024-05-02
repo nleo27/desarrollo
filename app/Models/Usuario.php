@@ -34,11 +34,17 @@ class Usuario extends Authenticatable
     }
 
     public function rol()
-{
+    {
     if ($this->roles->isNotEmpty()) {
         return $this->roles->first()->name;
     }
     
     return 'Sin rol';
-}
+
+    
+    }
+
+    public function carpeta(){
+        return $this->hasMany(Carpeta::class);
+    }
 }
