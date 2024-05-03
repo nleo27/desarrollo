@@ -46,6 +46,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/mi_unidad/upload-and-create', [ArchivoController::class, 'uploadAndCreate'])->name('mi_unidad.archivo.uploadAndCreate');
     Route::get('/admin/mi_unidad/carpeta/{id}/archivos', [ArchivoController::class, 'getArchivos'])->name('archivos');
 
+    //ruta para cambair archivo de forma privada a publico
+    Route::post('/admin/mi_unidad/carpeta', [ArchivoController::class, 'cambiar_de_privado_a_publico'])->name('mi_unidad.archivo.cambiar.privado.publico');
     
    
 });

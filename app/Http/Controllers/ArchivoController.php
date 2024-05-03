@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Carpeta;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class ArchivoController extends Controller
 {
@@ -99,4 +101,23 @@ class ArchivoController extends Controller
     
         return DataTables::collection($archivos)->toJson();
     }
+
+    public function cambiar_de_privado_a_publico(Request $request)
+    {
+        $id = $request->id;
+        $estado_archivo = "publico";
+        $archivo = Archivo::find($id);
+    
+        if (!$archivo) {
+            return Redirect::back()->withErrors(['No se encontró el archivo']);
+        }
+    
+        $archivo->estado_archivo = $estado_archivo;
+        $archivo->save();
+    
+            
+        // Retornar una respuesta JSON solo con el mensaje de éxito
+        return response()->json(['success' => 'Se actualizó el estado correctamente']);
+    }
+
 }

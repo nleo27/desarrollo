@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     
 @endsection
 
@@ -13,6 +14,7 @@
 
 @section('content')
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
         
         
     <style>
@@ -124,6 +126,8 @@
                             <div class="card-tools mr-1">
                                 <a href="{{url('/admin/mi_unidad')}}" class="btn btn-success"><i class="fas fa-solid fa-folder-open"></i>  Mi Unidad</a>
                             </div>
+
+                           
 
                             <div class="card-tools mr-1">
                                 <a href="#" onclick="history.back();" class="btn btn-danger">
@@ -427,26 +431,38 @@
     </div>
 
     <!-- Modal para compartir-->
-    <div class="modal fade" id="compartir-archivo" tabindex="-1" role="dialog" aria-labelledby="compartir-archivoTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="compartir-archivo" tabindex="-1" role="dialog" aria-labelledby="compartir-archivoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="ModalLongTitleArc">Compartir Archivo</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+                <h5 class="modal-title" id="ModalLongTitleArc">Compartir Archivo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body" id="ModalLongTitle">
                 <div id="informacion-doc"></div>
-            Compartir archivos
+                <form id="cambiarEstadoForm">
+                    <!-- Campo oculto para pasar la ruta del archivo -->
+                    <input type="hidden" id="rutaArchivo" name="rutaArchivo">
+                    <!-- Botones para cambiar el estado -->
+                    <div class="form-group">
+                        <label for="estadoArchivo">Cambiar Estado:</label>
+                        <select class="form-control" id="estadoArchivo" name="estadoArchivo">
+                            <option value="publico">Público</option>
+                            <option value="privado">Privado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
-        </div>
     </div>
+</div>
+
 
         
 
@@ -466,6 +482,9 @@
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap4.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
 
 <script>
     var carpetaId = "{{ $carpeta->id }}";
@@ -527,7 +546,7 @@
                 "infoFiltered": "(filtrado de _MAX_ registros totales)",
                 "search": "Buscar"
             }
-        });
+        })});
 
         // Evento de clic para abrir el modal
         $('#lista-documentos').on('click', '.ver-archivo', function() {
@@ -565,33 +584,87 @@
 
         // Evento de clic para abrir el modal
         $('#lista-documentos').on('click', '.compartir-archivo', function() {
-            var archivoData = $(this).data('info');
+        var archivoData = $(this).data('info');
 
-            // Actualizar el nombre en el cuerpo del modal
-           // $('#ModalLongTitleArc').text(archivoData.nombre);
+        // Actualizar el nombre en el cuerpo del modal
+        // $('#ModalLongTitleArc').text(archivoData.nombre);
 
-            // Limpiar el contenido anterior del cuerpo del modal
-            $('#ModalLongTitle').empty();
+        // Limpiar el contenido anterior del cuerpo del modal
+        $('#ModalLongTitle').empty();
 
-            // Mostrar la información del archivo en el cuerpo del modal
-            var modalBodyContenido = '';
+        // Mostrar la información del archivo en el cuerpo del modal
+        var modalBodyContenido = '';
+
+        // Rellenar el campo oculto con la ruta del archivo
+        $('#rutaArchivo').val(archivoData.ruta);
+
+        if (archivoData.estado_archivo === 'privado') {
+            modalBodyContenido += archivoData.nombre + '<br><br>';
+            modalBodyContenido += '<b>Este archivo está de forma Privada</b><br>';
+        } else {
+            modalBodyContenido += archivoData.nombre + '<br><br>';
+            modalBodyContenido += '<b>Este archivo está de forma Pública</b><br>';
+        }
+
+        // Agregar formulario para cambiar el estado
+        modalBodyContenido += '<form id="cambiarEstadoForm">';
+        modalBodyContenido += '<div class="form-group">';
+        modalBodyContenido += '<input type="text" name="id" value="' + archivoData.id + '" hidden>';
+        modalBodyContenido += '<label for="estadoArchivo">Cambiar Estado:</label>';
+        modalBodyContenido += '<select class="form-control" id="estadoArchivo" name="estadoArchivo">';
+        
+        if (archivoData.estado_archivo === 'privado') {
+        
+            modalBodyContenido += '<option value="publico">Público</option>';
+        } else {
             
-            
-            if (archivoData.estado_archivo==='privado') {
-                modalBodyContenido += archivoData.nombre + '<br><br>';
-                modalBodyContenido += '<b>Este archivo esta de forma Privado</b><br>';
-                modalBodyContenido += '<button type="button" class="btn btn-primary">Cambiar a Público</button>';
+            modalBodyContenido += '<option value="privado">Privado</option>';
+        }
+        modalBodyContenido += '</select>';
+        modalBodyContenido += '</div>';
+        modalBodyContenido += '<button type="submit" class="btn btn-primary">Guardar</button>';
+        modalBodyContenido += '</form>';
 
-            }else{
-                modalBodyContenido += '<b>Este archivo esta de forma Público</b><br>';
-                modalBodyContenido += '<button type="button" class="btn btn-success">Cambiar a Privado</button>';
-                modalBodyContenido += '<hr>';
-                modalBodyContenido += '<button type="button" class="btn btn-outline-primary">Copiar Link</button>';
-            }
             $('#ModalLongTitle').append(modalBodyContenido);
         });
-    });
+
+        $(document).ready(function() {
+            // Evento de envío del formulario
+            $(document).on('submit', '#cambiarEstadoForm', function(e) {
+                e.preventDefault(); // Evitar envío normal del formulario
+
+                var formData = $(this).serialize(); // Obtener datos del formulario
+
+                // Obtener el token CSRF
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                // Enviar datos al controlador mediante AJAX
+                $.ajax({
+            type: "POST",
+            url: "{{ route('mi_unidad.archivo.cambiar.privado.publico') }}",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                // Mostrar mensaje de éxito con Toastr
+                toastr.success(response.success, 'Éxito');
+
+                // Recargar el DataTable
+                $('#lista-documentos').DataTable().ajax.reload();
+                
+                // Puedes cerrar el modal manualmente
+                // $('#compartir-archivo').modal('hide');
+            },
+            error: function(error) {
+                console.error(error);
+                // Manejar errores si es necesario
+            }
+        });
+            });
+        });
 </script>
+
 
 
 
