@@ -88,7 +88,7 @@ class ArchivoController extends Controller
 
     public function getArchivos($id)
     {
-        $archivos = Archivo::select('id', 'nombre', 'nombre_archivo')->where('carpeta_id', $id)->get();
+        $archivos = Archivo::select('id', 'nombre', 'nombre_archivo', 'estado_archivo')->where('carpeta_id', $id)->get();
     
         // Agrega la URL del archivo a cada archivo en la colección
         $archivos->transform(function ($archivo) use ($id) {

@@ -393,6 +393,7 @@
                             <th>ID</th>
                             <th>Título</th>
                             <th>Nombre del archivo</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                             
                             
@@ -405,7 +406,7 @@
             </div>
         </div>
 
-      <!-- Modal -->
+      <!-- Modal para visualizar archivos -->
     <div class="modal fade" id="ver_archivo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
@@ -425,22 +426,29 @@
         </div>
     </div>
 
-        <script>
-            $(document).ready(function() {
-                $('#ver_archivo_modal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget);
-                    var archivoData = button.data('info');
-                    console.log(archivoData);
-                    var modal = $(this);
-                    modal.find('.modal-body #archivo-info').html(`
-                        <h5>${archivoData.nombre}</h5>
-                        <h5>${archivoData.id}</h5>
-                        <p>Nombre del Archivo: ${archivoData.nombre_archivo}</p>
-                        <!-- Puedes continuar mostrando otros detalles del archivo aquí -->
-                    `);
-                });
-            });
-        </script>
+    <!-- Modal para compartir-->
+    <div class="modal fade" id="compartir-archivo" tabindex="-1" role="dialog" aria-labelledby="compartir-archivoTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="ModalLongTitleArc">Compartir Archivo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body" id="ModalLongTitle">
+                <div id="informacion-doc"></div>
+            Compartir archivos
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            
+            </div>
+        </div>
+        </div>
+    </div>
+
+        
 
     
         
@@ -489,6 +497,7 @@
                     }
                 },
                 { data: 'nombre_archivo' },
+                { data: 'estado_archivo' },
                 {
                     data: null,
                     render: function(data, type, row) {
@@ -502,7 +511,7 @@
                                     <button type="button" class="dropdown-item" data-toggle="modal" data-target="#edit-file${data.id}"><i class="fas fa-edit text-warning"></i> Editar</button>
                                     <button type="button" class="dropdown-item" data-toggle="modal" data-target="#confirm-delete${data.id}"><i class="fas fa-trash-alt text-danger"></i> Eliminar</button>
                                     <a href="{{ asset('storage/${carpetaId}/${data.nombre}') }}" class="dropdown-item" download><i class="fas fa-file-download text-secondary"></i> Descargar</a>
-                                    <a href="#" class="dropdown-item ver-archivo" data-toggle="modal" data-target="#ver_archivo_modal" data-info=''><i class="fas fa-share-alt text-primary"></i> Compartir</a>
+                                    <a href="#" class="dropdown-item compartir-archivo" data-toggle="modal" data-target="#compartir-archivo" data-info='${JSON.stringify(data)}'><i class="fas fa-share-alt text-primary"></i> Compartir</a>
                                     
                                 </div>
                             </div>
@@ -552,6 +561,34 @@
             $('#modal-body-content').append(modalBodyContent);
 
             
+        });
+
+        // Evento de clic para abrir el modal
+        $('#lista-documentos').on('click', '.compartir-archivo', function() {
+            var archivoData = $(this).data('info');
+
+            // Actualizar el nombre en el cuerpo del modal
+           // $('#ModalLongTitleArc').text(archivoData.nombre);
+
+            // Limpiar el contenido anterior del cuerpo del modal
+            $('#ModalLongTitle').empty();
+
+            // Mostrar la información del archivo en el cuerpo del modal
+            var modalBodyContenido = '';
+            
+            
+            if (archivoData.estado_archivo==='privado') {
+                modalBodyContenido += archivoData.nombre + '<br><br>';
+                modalBodyContenido += '<b>Este archivo esta de forma Privado</b><br>';
+                modalBodyContenido += '<button type="button" class="btn btn-primary">Cambiar a Público</button>';
+
+            }else{
+                modalBodyContenido += '<b>Este archivo esta de forma Público</b><br>';
+                modalBodyContenido += '<button type="button" class="btn btn-success">Cambiar a Privado</button>';
+                modalBodyContenido += '<hr>';
+                modalBodyContenido += '<button type="button" class="btn btn-outline-primary">Copiar Link</button>';
+            }
+            $('#ModalLongTitle').append(modalBodyContenido);
         });
     });
 </script>
