@@ -56,8 +56,8 @@
                             <div class="modal fade" id="edit-area{{$area->id}}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Editar Área</h4>
+                                        <div class="modal-header bg-primary text-white">
+                                            <h4 class="modal-title"><i class="fas fa-edit"></i> Editar Área</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -67,15 +67,15 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="form-group">
-                                                    <label for="edit-nombre">Nombre</label>
+                                                <label for="edit-nombre"><i class="fas fa-signature"></i> Nombre</label>
                                                     <input type="text" class="form-control" value= "{{ $area->nombre }}" id="edit-nombre" name="nombre" require>
                                                     <input type="hidden" name="id" value="{{ $area->id }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="edit-descripcion">Descripción</label>
+                                                    <label for="edit-descripcion"><i class="fas fa-info-circle"></i> Descripción</label>
                                                     <input type="text" class="form-control" value= "{{ $area->descripcion }}" id="edit-descripcion" name="descripcion" require>
                                                 </div>
-                                                <button type="submit" id="btn-editar" class="btn btn-primary">Actualizar</button>
+                                                <button type="submit" id="btn-editar" class="btn btn-success">Actualizar</button>
                                             </form>
                                         </div>
                                     </div>
@@ -86,12 +86,12 @@
                             <div class="modal fade" id="confirm-delete{{$area->id}}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
+                                        <div class="modal-header bg-danger text-white">
                                             <h4 class="modal-title">Confirmar Eliminación</h4>
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>¿Estás seguro de que deseas eliminar el área "{{ $area->nombre }}"?</p>
+                                            <p>¿Estás seguro de que deseas eliminar el área <b>"{{ $area->nombre }}"?</b></p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -112,34 +112,35 @@
         </div>
     </div>
 
+   
     <!-- Modal Registrar Area-->
-    <div class="modal fade" id="modal-registrar-area">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Registrar Area</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-registrar-area" action="{{ route('areas.store') }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre">
-                            <span id="nombre-error" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="descripcion">Descripción</label>
-                            <input type="text" class="form-control" id="descripcion" name="descripcion">
-                        </div>
-                        <button type="button" id="btn-registrar" class="btn btn-primary">Registrar</button>
-                    </form>
+        <div class="modal fade" id="modal-registrar-area">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h4 class="modal-title"><i class="fas fa-plus-circle"></i> Registrar Área</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-registrar-area" action="{{ route('areas.store') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="nombre"><i class="fas fa-signature"></i> Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre">
+                                <span id="nombre-error" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion"><i class="fas fa-info-circle"></i> Descripción</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion">
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Registrar</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
    
 @endsection

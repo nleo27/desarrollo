@@ -19,7 +19,7 @@ class UsuarioSeeder extends Seeder
             'name' => 'Nilton Sergio',
             'apellidos' => 'Risco Collazos',
             'telefono' => '902541254',
-            'area_id' => '1',
+            'area_id' => null,
             'email' => 'niltonrisco@gmail.com',
             'password' => bcrypt('123456789'),
         ])->assignRole('Administrador');

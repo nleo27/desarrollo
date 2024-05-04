@@ -17,13 +17,19 @@ return new class extends Migration
             $table->string('name');
             $table->string('apellidos')->nullable();
             $table->string('telefono')->nullable();
-            $table->integer('area_id')->nullable();
+            $table->unsignedBigInteger('area_id')->nullable();
             $table->string('email')->unique();
             $table->string('rol')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        
+            $table->foreign('area_id')
+                  ->references('id')
+                  ->on('areas')
+                  ->onUpdate('cascade') 
+                  ->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
