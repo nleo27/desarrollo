@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use App\Models\Periodo;
+use Illuminate\Support\Facades\File;
 
 
 use Illuminate\Http\Request;
@@ -74,17 +75,25 @@ class PeriodoController extends Controller
             'activo' => $request->has('periodo_activo'),
         ]);
 
+        // Crear la carpeta para el nuevo periodo en storage/app/public/
+        $nombrePeriodo = $request->input('nombre_periodo');
+        $rutaCarpeta = storage_path('app/public/' . $nombrePeriodo);
+
+        if (!File::exists($rutaCarpeta)) {
+            File::makeDirectory($rutaCarpeta);
+        }
+
         toastr()->success('Periodo registrado correctamente', 'Éxito');
 
         return redirect()->route('create_periodo');
     }
 
     public function seleccionarPeriodo($id)
-{
-    // Guardar el ID del periodo seleccionado en la sesión
-    Session::put('periodo_seleccionado', $id);
-    
-    // Redireccionar a la página de documentos
-    return redirect()->route('areas.store');
-}
+    {
+        // Guardar el ID del periodo seleccionado en la sesión
+        Session::put('periodo_seleccionado', $id);
+        
+        // Redireccionar a la página de documentos
+        return redirect()->route('documento.crear', ['id' => $id]);
+    }
 }

@@ -198,7 +198,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-dark',//'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -265,6 +265,8 @@ return [
     'password_email_url' => 'password/email',
     'profile_url' => false,
 
+    
+
     /*
     |--------------------------------------------------------------------------
     | Laravel Mix
@@ -301,6 +303,26 @@ return [
             'topnav_right' => true,
         ],
         [
+            'type' => 'navbar-notification',
+            'id' => 'my-notification',                // An ID attribute (required).
+            'icon' => 'fas fa-bell',                  // A font awesome icon (required).
+            'icon_color' => 'warning',                // The initial icon color (optional).
+            'label' => 0,                             // The initial label for the badge (optional).
+            'label_color' => 'danger',                // The initial badge color (optional).
+            'url' => 'notifications/show',            // The url to access all notifications/elements (required).
+            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+            'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
+            'dropdown_flabel' => 'All notifications', // The label for the dropdown footer link (optional).
+            'update_cfg' => [
+                'url' => '',        // The url to periodically fetch new data (optional).
+                'period' => 30,                       // The update period for get new data (in seconds, optional).
+            ],
+        ],
+        [
+            'type' => 'darkmode-widget',
+            'topnav_right' => true,     // Or "topnav => true" to place on the left.
+        ],
+        [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
@@ -319,25 +341,33 @@ return [
             'text' => 'Inicio',
             'url' => 'home',
             'icon' => 'fas fa-fw fa-home',
+            'can' => 'home',
             
         ],
         [
             'text' => 'Crear Periodo',
             'url' => 'create-periodo',
             'icon' => 'fas fa-fw fa-clock',
-            'can' => '',
+            'can' => 'create_periodo.index',
         ],
         [
             'text' => 'Crear Usuario',
             'url' => 'create-usuario',
             'icon' => 'fas fa-fw fa-user',
-            'can' => '',
+            'can' => 'create_usuario.index',
         ],
 
         [
             'text' => 'Crear Area',
             'url' => 'create-area',
             'icon' => 'fas fa-fw fa-house-user',
+            'can' => 'create_area.index',
+        ],
+
+        [
+            'text' => 'Crear carpetas',
+            'url' => '/admin/mi_unidad',
+            'icon' => 'fas fa-fw fa-folder',
             'can' => '',
         ],
 
