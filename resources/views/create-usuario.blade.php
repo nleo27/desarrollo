@@ -10,12 +10,12 @@
 
 @section('content')
     <div class="card mt-5">
-        <div class="card-header">
+        <div class="card-header ">
             <h3 class="card-title">Lista de Usuarios</h3>
             @can('create_usuario.create')
 
             <div class="card-tools">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-usuario">Registrar Usuario</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-usuario"><i class="fas fa-users"></i> Registrar Usuario</button>
             </div>
                 
             @endcan
@@ -69,63 +69,103 @@
     </div>
 
     <!-- Modal Registrar Usuario -->
-<div class="modal fade" id="modal-registrar-usuario">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Registrar Usuario</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('usuarios.store') }}" method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="dni">DNI:</label>
-                                <input type="text" class="form-control" id="dni" name="dni">
-                            </div>
-                            <div class="form-group">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="apellidos">Apellidos:</label>
-                                <input type="text" class="form-control" id="apellidos" name="apellidos">
-                            </div>
-                            <div class="form-group">
-                                <label for="telefono">Teléfono:</label>
-                                <input type="text" class="form-control" id="telefono" name="telefono">
-                            </div>
-                            <div class="form-group">
-                                <label for="area">Área:</label>
-                                <select class="form-control" id="area_id" name="area_id">
-                                @foreach($areas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->nombre }}</option>
-                                @endforeach    
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="correo">Correo:</label>
-                                <input type="email" class="form-control" id="email" name="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="clave">Clave:</label>
-                                <input type="password" class="form-control" id="password" name="password">
-                            </div>
-                            
-                        </div>
+        <div class="modal fade" id="modal-registrar-usuario">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h4 class="modal-title"><i class="fas fa-users"></i> Registrar Usuario</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Registrar</button>
-                </form>
+                    <div class="modal-body">
+                        <form action="{{ route('usuarios.store') }}" method="POST">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="dni">DNI:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="dni" name="dni">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apellidos">Apellidos:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="apellidos" name="apellidos">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-user-edit"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="telefono">Teléfono:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="telefono" name="telefono">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+
+                                    
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="area">Área:</label>
+                                        <select class="form-select" aria-label="Default select example"  id="area_id" name="area_id">
+                                        @foreach($areas as $area)
+                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                        @endforeach    
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="correo">Correo:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="email" class="form-control" id="email" name="email">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="clave">Clave:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="password" class="form-control" id="password" name="password">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+
+       
+
+
+
 
 @endsection
 

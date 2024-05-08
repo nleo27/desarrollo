@@ -20,7 +20,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <div class="card-tools">
-                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-registrar-archivador"><i class="fas fa-solid fa-folder-plus"></i> Registrar Archivador</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-archivador"><i class="fas fa-solid fa-folder-plus"></i> Registrar Archivador</button>
                         </div>
                     </ol>
                 </div>
@@ -32,8 +32,8 @@
     <div class="modal fade" id="modal-registrar-archivador">
         <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Cambié modal-dialog a modal-lg para hacerlo más ancho -->
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Registrar Archivador</h4>
+                <div class="modal-header bg-primary text-white">
+                    <h4 class="modal-title"><i class="fas fa-solid fa-folder-plus"></i> Registrar Archivador</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -44,23 +44,48 @@
                         <input type="text" class="form-control" id="user_id" name="user_id" value="{{Auth::user()->id}}" hidden>
                         <div class="form-group">
                             <label for="nombre">Nombre de Archivador</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-folder-open"></i></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="codigo">Código</label>
-                            <input type="text" class="form-control" id="codigo" name="codigo" >
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="codigo" name="codigo" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-th"></i></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="estante">Estante</label>
-                            <input type="text" class="form-control" id="estante" name="estante" >
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="estante" name="estante" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="modulo">Módulo</label>
-                            <input type="text" class="form-control" id="modulo" name="modulo" >
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="modulo" name="modulo" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-object-ungroup"></i></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="descripcion">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" ></textarea>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" ></textarea>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-marker"></i></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer"> <!-- Añadí el modal-footer para los botones -->
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

@@ -3,52 +3,66 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-<div class="row">
-    <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card bg-danger text-white">
-            <div class="card-body">
-                <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">No tienes datos registrados en las areas.</p>
-                <a href="" class="btn btn-light">
-                    <i class="fas fa-list"></i> Ver Áreas
-                </a>
+
+    <div class="row">
+
+        <div class="col-lg-3 col-6">
+        
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>150</h3>
+                    <p>New Orders</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">No hay areas registardas.</p>
-                <a href="" class="btn btn-light">
-                    <i class="fas fa-list"></i> Ver Áreas
-                </a>
+        
+        <div class="col-lg-3 col-6">
+        
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <p>Bounce Rate</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-chart-area"></i>
+                </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">Tienes mucha informacion registrada</p>
-                <a href="" class="btn btn-light">
-                    <i class="fas fa-list"></i> Ver Áreas
-                </a>
+        
+        <div class="col-lg-3 col-6">
+        
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>44</h3>
+                    <p>User Registrations</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <h5 class="card-title">Áreas Registradas</h5>
-                <p class="card-text">Tienes áreas registradas en tu base de datos.</p>
-                <a href="" class="btn btn-light">
-                    <i class="fas fa-list"></i> Ver Áreas
-                </a>
+        
+        <div class="col-lg-3 col-6">
+        
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>65</h3>
+                    <p>Unique Visitors</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
+        
     </div>
-</div>
 
 @stop
 

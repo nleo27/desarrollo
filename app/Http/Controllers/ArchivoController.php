@@ -104,20 +104,42 @@ class ArchivoController extends Controller
 
     public function cambiar_de_privado_a_publico(Request $request)
     {
-        $id = $request->id;
-        $estado_archivo = "publico";
+            $id = $request->id;
         $archivo = Archivo::find($id);
-    
+
         if (!$archivo) {
             return Redirect::back()->withErrors(['No se encontró el archivo']);
         }
-    
+
+        // Verificar el estado actual del archivo
+        if ($archivo->estado_archivo === "privado") {
+            $estado_archivo = "publico";
+            $carpeta_origen = $archivo->carpeta_id . '/';
+            $carpeta_destino = 'public/' . $archivo->carpeta_id . '/';
+        } else {
+            $estado_archivo = "privado";
+            $carpeta_origen = 'public/' . $archivo->carpeta_id . '/';
+            $carpeta_destino = $archivo->carpeta_id . '/';
+        }
+
+        // Cambiar el estado del archivo
         $archivo->estado_archivo = $estado_archivo;
         $archivo->save();
-    
-            
-        // Retornar una respuesta JSON solo con el mensaje de éxito
-        return response()->json(['success' => 'Se actualizó el estado correctamente']);
-    }
 
+        // Construir la ruta de origen y destino
+        $ruta_archivo_origen = $carpeta_origen . $archivo->nombre;
+        $ruta_archivo_destino = $carpeta_destino . $archivo->nombre;
+
+        try {
+            // Mover el archivo a la carpeta correspondiente
+            \Storage::move($ruta_archivo_origen, $ruta_archivo_destino);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+        // Retornar una respuesta JSON con el mensaje de éxito
+        return response()->json(['success' => 'Se actualizó el estado correctamente']);
+
+
+    }
 }

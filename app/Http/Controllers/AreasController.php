@@ -89,15 +89,23 @@ class AreasController extends Controller
                 return back();
             }
 
-    public function destroy($id)
-        {
-            $area = Area::findOrFail($id);
-            $area->delete();
-
-            toastr()->success('Área eliminada correctamente', 'Notificación');
-
-            return back();
-        }
+            public function destroy($id)
+            {
+                $area = Area::findOrFail($id);
+                
+                // Desvincula a los usuarios de esta área
+                
+                 $area->usuarios()->update(['area_id' => null]);
+                
+                // Elimina el área
+                $area->delete();
+            
+                toastr()->success('Área eliminada correctamente', 'Notificación');
+            
+                return back();
+            }
 
 }
+
+
 

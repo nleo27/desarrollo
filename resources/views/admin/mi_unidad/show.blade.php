@@ -596,7 +596,7 @@
         var modalBodyContenido = '';
 
         // Rellenar el campo oculto con la ruta del archivo
-        $('#rutaArchivo').val(archivoData.ruta);
+        $('#rutaArchivo').val(archivoData.url);
 
         if (archivoData.estado_archivo === 'privado') {
             modalBodyContenido += archivoData.nombre + '<br><br>';
@@ -620,9 +620,30 @@
             
             modalBodyContenido += '<option value="privado">Privado</option>';
         }
+       
         modalBodyContenido += '</select>';
         modalBodyContenido += '</div>';
-        modalBodyContenido += '<button type="submit" class="btn btn-primary">Guardar</button>';
+        modalBodyContenido += '<button type="submit" class="btn btn-primary">Guardar</button><br>';
+
+        if (archivoData.estado_archivo === 'publico') {
+            modalBodyContenido += '<hr>';
+            modalBodyContenido += '<div class="input-group mb-3">';
+            modalBodyContenido += '<input type="text" class="form-control" id="urlArchivo" value="' + archivoData.url + '" readonly>';
+            modalBodyContenido += '<div class="input-group-append">';
+            modalBodyContenido += '<button class="btn btn-outline-success copiar-link" type="button">Copiar Link</button>';
+            modalBodyContenido += '</div>';
+            modalBodyContenido += '</div>';
+
+            // Evento de clic para copiar el link
+            $(document).on('click', '.copiar-link', function() {
+                var urlArchivo = $('#urlArchivo').val(); // Obtener la URL del archivo
+                $('#urlArchivo').select(); // Seleccionar todo el texto en el campo de entrada
+                document.execCommand("copy"); // Copiar el texto seleccionado al portapapeles
+                toastr.success('La URL del archivo ha sido copiada al portapapeles', 'Éxito');
+            });
+        }
+       
+        
         modalBodyContenido += '</form>';
 
             $('#ModalLongTitle').append(modalBodyContenido);

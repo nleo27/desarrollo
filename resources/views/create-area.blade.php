@@ -17,7 +17,7 @@
             <h3 class="card-title">Crear nueva area</h3>
             @can('create_area.create')
                 <div class="card-tools">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-area">Registrar Area</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-area"> <i class="fas fa-house-user"></i> Registrar Area</button>
                 </div>
             @endcan
         </div>
@@ -115,7 +115,7 @@
    
     <!-- Modal Registrar Area-->
         <div class="modal fade" id="modal-registrar-area">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
                         <h4 class="modal-title"><i class="fas fa-plus-circle"></i> Registrar Área</h4>
