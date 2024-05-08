@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Carpeta;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Periodo;
+use App\Models\Area;
 
 class CarpetaController extends Controller
 {
@@ -14,11 +16,24 @@ class CarpetaController extends Controller
     public function index()
     {
         $id_user = Auth::user()->id;
-        $carpeta = Carpeta::whereNull('carpeta_padre_id')
-                    ->where('user_id', $id_user)
-                    ->get();
 
-        return view('admin.mi_unidad.index', ['carpetas'=>$carpeta]);
+        // Obtener el área del usuario
+        $area_usuario = Auth::user()->area;
+    
+        // Obtener solo los periodos activos
+        $periodos = Periodo::where('periodo_activo', 1)->get();
+    
+        // Obtener solo las carpetas que pertenecen al usuario, en el área específica y en el período activo
+        $carpetas = Carpeta::where('user_id', $id_user)
+                    ->where('id_periodo', $periodos->pluck('id')) // Filtrar por los IDs de los periodos activos
+                    ->where('id_area', $area_usuario->id) // Filtrar por el ID del área del usuario
+                    ->whereNull('carpeta_padre_id')
+                    ->get();
+    
+        // Listar solo el área del usuario
+        $areas = $area_usuario ? [$area_usuario] : [];
+    
+        return view('admin.mi_unidad.index', compact('carpetas', 'periodos', 'areas'));
     }
 
     /**
@@ -50,6 +65,8 @@ class CarpetaController extends Controller
         $carpeta->modulo = $request->modulo;
         $carpeta->estante = $request->estante;
         $carpeta->codigo = $request->codigo;
+        $carpeta->id_periodo = $request->periodo_id;
+        $carpeta->id_area = $request->area_id;
         $carpeta->descipcion = $request->descripcion;
         $carpeta->save();
 

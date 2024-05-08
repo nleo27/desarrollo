@@ -132,7 +132,7 @@ class ArchivoController extends Controller
 
         try {
             // Mover el archivo a la carpeta correspondiente
-            \Storage::move($ruta_archivo_origen, $ruta_archivo_destino);
+            Storage::move($ruta_archivo_origen, $ruta_archivo_destino);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

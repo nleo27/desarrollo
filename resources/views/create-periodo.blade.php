@@ -68,52 +68,51 @@
     </div>
 
     <!-- Modal Registrar Periodo -->
-  <div class="modal fade" id="modal-registrar-periodo" tabindex="-1" role="dialog" aria-labelledby="modal-registrar-periodo" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal-registrar-periodo-title">Registrar Periodo de Alcaldía</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="modal fade" id="modal-registrar-periodo" tabindex="-1" role="dialog" aria-labelledby="modal-registrar-periodo" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-registrar-periodo-title">Registrar Periodo de Alcaldía</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-registrar-periodo" action="{{ route('periodo.create2') }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="nombre-periodo">Nombre del Periodo:</label>
+                                    <input type="text" class="form-control" id="nombre-periodo" name="nombre_periodo" required>
+                                    <span id="nombre-error" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="descripcion-periodo">Descripción del Periodo:</label>
+                                    <textarea class="form-control" id="descripcion-periodo" name="descripcion_periodo" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha-inicio">Fecha de Inicio:</label>
+                                    <input type="date" class="form-control" id="fecha-inicio" name="fecha_inicio" required>
+                                    <span id="fecha_inicio-error" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha-fin">Fecha de Fin:</label>
+                                    <input type="date" class="form-control" id="fecha-fin" name="fecha_fin" required>
+                                    <span id="fecha_fin-error" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="periodo-activo" name="periodo_activo" value="1">
+                                    <label class="form-check-label" for="periodo-activo">Periodo Activo</label>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary" id="btn-guardar-periodo">Guardar</button>
+                                </div>
+                        </form>
+                    </div>
+    
+                </div>
         </div>
-        <div class="modal-body">
-          <form id="form-registrar-periodo" action="{{ route('periodo.create2') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="nombre-periodo">Nombre del Periodo:</label>
-                <input type="text" class="form-control" id="nombre-periodo" name="nombre_periodo" required>
-                <span id="nombre-error" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="descripcion-periodo">Descripción del Periodo:</label>
-                <textarea class="form-control" id="descripcion-periodo" name="descripcion_periodo" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="fecha-inicio">Fecha de Inicio:</label>
-                <input type="date" class="form-control" id="fecha-inicio" name="fecha_inicio" required>
-                <span id="fecha_inicio-error" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="fecha-fin">Fecha de Fin:</label>
-                <input type="date" class="form-control" id="fecha-fin" name="fecha_fin" required>
-                <span id="fecha_fin-error" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="periodo-activo" name="periodo_activo">
-                <label class="form-check-label" for="periodo-activo">Periodo Activo</label>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn btn-primary" id="btn-guardar-periodo">Guardar</button>
-            </div>
-        </form>
-        </div>
-        
-      
-      </div>
-      </div>
-  </div>
+    </div>
 @endsection
 
 @section('js')

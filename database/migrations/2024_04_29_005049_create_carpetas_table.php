@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('descipcion')->nullable();
             $table->unsignedBigInteger('carpeta_padre_id')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('id_area');
+            $table->unsignedBigInteger('id_periodo');
             $table->timestamps();
 
             $table->foreign('carpeta_padre_id')
@@ -31,6 +33,18 @@ return new class extends Migration
             $table->foreign('user_id')
                             ->references('id')
                             ->on('users')
+                            ->onUpdate('cascade') 
+                            ->onDelete('cascade');
+
+            $table->foreign('id_area')
+                            ->references('id')
+                            ->on('areas')
+                            ->onUpdate('cascade') 
+                            ->onDelete('cascade');
+
+            $table->foreign('id_periodo')
+                            ->references('id')
+                            ->on('periodos')
                             ->onUpdate('cascade') 
                             ->onDelete('cascade');
         });

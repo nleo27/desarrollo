@@ -22,4 +22,12 @@ class Carpeta extends Model
     public function user(){
         return $this->belongsTo(Usuario::class);
     }
+
+    public function areas(){
+        return $this->belongsTo(Area::class);
+    }
+
+    public function periodos(){
+        return $this->belongsTo(Periodo::class);
+    }
 }

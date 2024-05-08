@@ -72,16 +72,16 @@ class PeriodoController extends Controller
             'descripcion' => $request->input('descripcion_periodo'),
             'fecha_inicio' => $fecha_inicio,
             'fecha_fin' => $fecha_fin,
-            'activo' => $request->has('periodo_activo'),
+            'periodo_activo' => $request->has('periodo_activo') ? 1 : 0,
         ]);
 
         // Crear la carpeta para el nuevo periodo en storage/app/public/
-        $nombrePeriodo = $request->input('nombre_periodo');
+        /*$nombrePeriodo = $request->input('nombre_periodo');
         $rutaCarpeta = storage_path('app/public/' . $nombrePeriodo);
 
         if (!File::exists($rutaCarpeta)) {
             File::makeDirectory($rutaCarpeta);
-        }
+        }*/
 
         toastr()->success('Periodo registrado correctamente', 'Éxito');
 

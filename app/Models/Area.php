@@ -14,4 +14,8 @@ class Area extends Model
     {
         return $this->hasMany(Usuario::class, 'area_id');
     }
+
+    public function carpetaArea(){
+        return $this->hasMany(Carpeta::class);
+    }
 }

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('periodos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->boolean('periodo_activo')->default(false);
-            $table->bigInteger('id_usuario');
+            
             $table->timestamps();
         });
     }

@@ -586,9 +586,7 @@
         $('#lista-documentos').on('click', '.compartir-archivo', function() {
         var archivoData = $(this).data('info');
 
-        // Actualizar el nombre en el cuerpo del modal
-        // $('#ModalLongTitleArc').text(archivoData.nombre);
-
+      
         // Limpiar el contenido anterior del cuerpo del modal
         $('#ModalLongTitle').empty();
 
@@ -623,7 +621,7 @@
        
         modalBodyContenido += '</select>';
         modalBodyContenido += '</div>';
-        modalBodyContenido += '<button type="submit" class="btn btn-primary">Guardar</button><br>';
+        modalBodyContenido += '<button type="submit" class="btn btn-primary">Cambiar Estado</button><br>';
 
         if (archivoData.estado_archivo === 'publico') {
             modalBodyContenido += '<hr>';
