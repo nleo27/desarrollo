@@ -63,33 +63,31 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('guardar_areas') }}" method="POST" id="form-agregar-areas">
+                                                    <form action="{{ route('guardar_areas') }}" method="POST" id="form-agregar-areas{{ $grupo->id }}">
                                                         @csrf
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                
                                                                 <input type="text" class="form-control" id="id_{{ $grupo->id }}" name="grupo_id" value="{{ $grupo->id }}" hidden>
                                                                 <div class="form-group">
                                                                     <label for="area">Agregar Área:</label>
                                                                     <select class="form-select" aria-label="Default select example" id="area_id_{{ $grupo->id }}" name="area_id">
                                                                         @foreach($areas as $area)
-                                                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                                                        <option value="{{ $area->id }}">{{ $area->nombre }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
-
+                                                
                                                                 <!-- Lista de áreas seleccionadas -->
                                                                 <div class="form-group">
                                                                     <label for="areas_seleccionadas">Áreas Seleccionadas:</label>
                                                                     <ul class="list-group" id="areas_seleccionadas_{{ $grupo->id }}">
                                                                         <!-- Aquí se agregarán las áreas seleccionadas -->
                                                                     </ul>
-                                                                    <input type="hidden" name="areas[]" value="{{ $area->id }}">
                                                                 </div>
-
+                                                
                                                                 <!-- Botón para agregar área -->
                                                                 <button type="button" class="btn btn-success btn-agregar-area" id="agregar_area_{{ $grupo->id }}" data-modal-id="{{ $grupo->id }}"><i class="fas fa-plus"></i> Agregar Área</button>
-
+                                                
                                                                 <!-- Botón para guardar áreas -->
                                                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
                                                             </div>
@@ -184,66 +182,63 @@
         });
     </script>
 
-<script>
-    $(document).ready(function () {
-        $('.btn-agregar-area').click(function () {
-            var modalId = $(this).data('modal-id');
-            var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
+    <script>
+        $(document).ready(function () {
+            $('.btn-agregar-area').click(function () {
+                var modalId = $(this).data('modal-id');
+                var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
 
-            console.log('Botón "Agregar Área" clickeado');
-
-            // Eliminar área seleccionada
-            $('#modal-agregar-area' + modalId).on('click', '.btn-danger', function () {
-                console.log('Evento click del botón "Eliminar Área" manejado');
-                $(this).closest('li').remove();
+                // Eliminar área seleccionada
+                $('#modal-agregar-area' + modalId).on('click', '.btn-danger', function () {
+                    $(this).closest('li').remove();
+                });
             });
-        });
 
-        // Manejar el evento click del botón "Agregar Área"
             // Manejar el evento click del botón "Agregar Área"
             $(document).on('click', '[id^=agregar_area_]', function () {
                 var modalId = $(this).data('modal-id');
-                var areaIds = $('#areas_seleccionadas_' + modalId + ' input[type=hidden]').map(function() {
-                    return $(this).val();
-                }).get();
-
                 var areaId = $('#area_id_' + modalId).val();
                 var areaNombre = $('#area_id_' + modalId + ' option:selected').text();
                 var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
 
-                console.log('Evento click del botón "Agregar Área" manejado');
-
+                
                 if (areaId === "") {
                     alert('Por favor, seleccione un área.');
-                } else if (areaIds.includes(areaId)) {
+                } else if (areasSeleccionadas.find('input[value="' + areaId + '"]').length > 0) {
                     alert('¡Esta área ya fue agregada!');
                 } else {
-                    areasSeleccionadas.append('<li class="list-group-item">' + areaNombre + '<button type="button" class="btn btn-danger btn-sm float-end"><i class="fas fa-times"></i></button><input type="hidden" name="areas[]" value="' + areaId + '"></li>');
+                    areasSeleccionadas.append('<li class="list-group-item">' + areaNombre + '<button type="button" class="btn btn-danger btn-sm float-end"><i class="fas fa-times"></i></button></li>');
+                    // Eliminar el input si ya existe
+                    $('input[name="areas[]"][value="' + areaId + '"]').remove();
+                    // Agregar el input oculto al formulario específico
+                    $('#form-agregar-areas' + modalId).append('<input type="hidden" name="areas[]" value="' + areaId + '">');
+                    console.log('Área agregada correctamente:', areaId);
                 }
             });
 
-        // Manejar el envío del formulario para guardar áreas
-        $('form').submit(function (event) {
-            event.preventDefault();
+            // Manejar el envío del formulario para guardar áreas
+            $('[id^=form-agregar-areas]').submit(function (event) {
+                event.preventDefault();
 
-            var formData = $(this).serialize();
+                var formData = $(this).serialize();
 
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: formData,
-                success: function (response) {
-                    alert('Áreas guardadas exitosamente');
-                    // Puedes agregar aquí alguna lógica adicional después de guardar las áreas
-                },
-                error: function (xhr, status, error) {
-                    alert('Error al guardar las áreas');
-                    console.error(xhr.responseText);
-                }
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    success: function (response) {
+                        
+                        window.location.href = "{{ route('create.grupo') }}"; 
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error al guardar las áreas');
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
 @endsection
 
