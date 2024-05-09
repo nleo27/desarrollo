@@ -350,13 +350,7 @@ return [
             'icon' => 'fas fa-fw fa-clock',
             'can' => 'create_periodo.index',
         ],
-        [
-            'text' => 'Crear Usuario',
-            'url' => 'create-usuario',
-            'icon' => 'fas fa-fw fa-user',
-            'can' => 'create_usuario.index',
-        ],
-
+        
         [
             'text' => 'Crear Area',
             'url' => 'create-area',
@@ -365,9 +359,26 @@ return [
         ],
 
         [
+            'text' => 'Crear Usuario',
+            'url' => 'create-usuario',
+            'icon' => 'fas fa-fw fa-user',
+            'can' => 'create_usuario.index',
+        ],
+
+        
+
+        [
             'text' => 'Crear carpetas',
             'url' => '/admin/mi_unidad',
             'icon' => 'fas fa-fw fa-folder',
+            'can' => '',
+        ],
+
+        ['header' => 'COMPARTIR'],
+        [
+            'text' => 'Crear Grupos',
+            'url' => 'create-grupo',
+            'icon' => 'fas fa-users',
             'can' => '',
         ],
 

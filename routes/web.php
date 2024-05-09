@@ -9,6 +9,8 @@ use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\RegistroUsuario;
 use App\Http\Controllers\CarpetaController;
+use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\GrupoAreaController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -48,6 +50,14 @@ Route::middleware(['auth'])->group(function () {
 
     //ruta para cambair archivo de forma privada a publico
     Route::post('/admin/mi_unidad/carpeta', [ArchivoController::class, 'cambiar_de_privado_a_publico'])->name('mi_unidad.archivo.cambiar.privado.publico');
+
+
+    //RUTA DE CREAR GRUPO
+    Route::get('/create-grupo', [GrupoController::class, 'create'])->name('create.grupo');
+
+    Route::post('/crear-grupo', [GrupoController::class, 'creacionGrupo'])->name('grupos.creacion');
+
+    Route::post('/guardar-areas', [GrupoAreaController::class, 'guardarAreas'])->name('guardar_areas');
     
    
 });
