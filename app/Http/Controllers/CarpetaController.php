@@ -17,28 +17,33 @@ class CarpetaController extends Controller
     {
         $id_user = Auth::user()->id;
 
-        // Obtener el área del usuario
+        // Obtener el área del usuario si está asignada
         $area_usuario = Auth::user()->area;
-    
+
         // Obtener solo los periodos activos
         $periodos = Periodo::where('periodo_activo', 1)->get();
-    
-        // Obtener solo las carpetas que pertenecen al usuario, en el área específica y en el período activo
-        $carpetas = Carpeta::where('user_id', $id_user)
-                    ->where('id_periodo', $periodos->pluck('id')) // Filtrar por los IDs de los periodos activos
-                    ->where('id_area', $area_usuario->id) // Filtrar por el ID del área del usuario
-                    ->whereNull('carpeta_padre_id')
-                    ->get();
-    
-        // Listar solo el área del usuario
-        $areas = $area_usuario ? [$area_usuario] : [];
-    
+
+        // Verificar si el usuario tiene un área asignada
+        if ($area_usuario) {
+            // Obtener solo las carpetas que pertenecen al usuario, en el área específica y en el período activo
+            $carpetas = Carpeta::where('user_id', $id_user)
+                        ->whereIn('id_periodo', $periodos->pluck('id')) // Filtrar por los IDs de los periodos activos
+                        ->where('id_area', $area_usuario->id) // Filtrar por el ID del área del usuario
+                        ->whereNull('carpeta_padre_id')
+                        ->get();
+
+            // Listar solo el área del usuario
+            $areas = [$area_usuario];
+        } else {
+            // Si el usuario no tiene un área asignada, no mostrar ninguna carpeta
+            $carpetas = [];
+            $areas = [];
+        }
+
         return view('admin.mi_unidad.index', compact('carpetas', 'periodos', 'areas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+   
     public function create()
     {
         //

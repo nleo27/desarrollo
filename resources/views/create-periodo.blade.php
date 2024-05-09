@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="descripcion-periodo">Descripción del Periodo:</label>
-                                    <textarea class="form-control" id="descripcion-periodo" name="descripcion_periodo" rows="3"></textarea>
+                                    <textarea class="form-control" id="descripcion-periodo" name="descripcion_periodo" rows="3" required></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="fecha-inicio">Fecha de Inicio:</label>
