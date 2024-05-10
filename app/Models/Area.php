@@ -18,4 +18,9 @@ class Area extends Model
     public function carpetaArea(){
         return $this->hasMany(Carpeta::class);
     }
+
+    public function grupos()
+    {
+        return $this->belongsToMany(Grupo::class, 'grupo_area', 'area_id', 'grupo_id');
+    }
 }
