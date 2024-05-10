@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/crear-grupo', [GrupoController::class, 'creacionGrupo'])->name('grupos.creacion');
 
     Route::post('/guardar-areas', [GrupoAreaController::class, 'guardarAreas'])->name('guardar_areas');
+
+    Route::post('eliminar-area', [GrupoAreaController::class, 'quitarArea'])->name('eliminar_area');
     
    
 });

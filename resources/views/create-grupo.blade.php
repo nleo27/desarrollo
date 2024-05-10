@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 @endsection
 
 @section('title', 'Grupos')
@@ -77,19 +79,34 @@
                                                                     </select>
                                                                 </div>
                                                 
+                                                                
                                                                 <!-- Lista de áreas seleccionadas -->
                                                                 <div class="form-group">
                                                                     <label for="areas_seleccionadas">Áreas Seleccionadas:</label>
                                                                     <ul class="list-group" id="areas_seleccionadas_{{ $grupo->id }}">
                                                                         <!-- Aquí se agregarán las áreas seleccionadas -->
+                                                                        @forelse($grupo->areas as $area)
+                                                                        <li class="list-group-item">
+                                                                            {{ $area->nombre }}
+                                                                            <a href="#" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i> Quitar</a>
+                                                                        </li>
+                                                                        @empty
+                                                                        <li class="list-group-item no-areas">Aún no hay áreas asignadas al grupo</li>
+                                                                        @endforelse
                                                                     </ul>
                                                                 </div>
                                                 
                                                                 <!-- Botón para agregar área -->
                                                                 <button type="button" class="btn btn-success btn-agregar-area" id="agregar_area_{{ $grupo->id }}" data-modal-id="{{ $grupo->id }}"><i class="fas fa-plus"></i> Agregar Área</button>
                                                 
-                                                                <!-- Botón para guardar áreas -->
+                                                                <!-- Botón para guardar o actualizar áreas -->
+                                                                @if ($grupo->areas->isEmpty())
                                                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                                                                @else
+                                                                <button type="button" class="btn btn-primary btn-actualizar-areas" data-grupo-id="{{ $grupo->id }}"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                                                                @endif
+
+                                                             
                                                             </div>
                                                         </div>
                                                     </form>
@@ -166,6 +183,7 @@
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         new DataTable('#lista-grupo',{
             responsive: true,
@@ -184,6 +202,9 @@
 
     <script>
         $(document).ready(function () {
+           
+    
+           
             $('.btn-agregar-area').click(function () {
                 var modalId = $(this).data('modal-id');
                 var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
@@ -200,6 +221,7 @@
                 var areaId = $('#area_id_' + modalId).val();
                 var areaNombre = $('#area_id_' + modalId + ' option:selected').text();
                 var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
+                           
 
                 
                 if (areaId === "") {
@@ -213,6 +235,8 @@
                     // Agregar el input oculto al formulario específico
                     $('#form-agregar-areas' + modalId).append('<input type="hidden" name="areas[]" value="' + areaId + '">');
                     console.log('Área agregada correctamente:', areaId);
+
+                    
                 }
             });
 
@@ -238,6 +262,47 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+                
+        
+            
+            // Eliminar área seleccionada
+            $(document).on('click', '.btn-quitar-area', function () {
+                var boton = $(this); // Almacenar una referencia al botón
+
+                var grupoId = boton.data('grupo');
+                var areaId = boton.data('area');
+
+                // Eliminar el área del grupo
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('eliminar_area') }}",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        grupo_id: grupoId,
+                        area_id: areaId
+                    },
+                    success: function (response) {
+                        // Quitar el área de la lista
+                        boton.closest('li').remove(); // Usar la referencia al botón
+                        toastr.success('Se eliminó el area', 'Éxito');
+                      
+
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error, no eliminado')
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            
+
+            
+            });
     </script>
 
 @endsection
