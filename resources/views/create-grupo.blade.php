@@ -249,7 +249,6 @@
                 var modalId = $(this).data('modal-id');
                 var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
 
-                
             });
 
             // Manejar el evento click del botón "Agregar Área"
@@ -333,6 +332,7 @@
                         console.error(xhr.responseText);
                     }
                 });
+                
             });
 
             });
