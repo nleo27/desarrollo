@@ -91,9 +91,10 @@
                                                                             <a href="#" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i> Quitar</a>
                                                                         </li>
                                                                         @empty
-                                                                        <li class="list-group-item no-areas">Aún no hay áreas asignadas al grupo</li>
+                                                                        <li class="list-group-item no-areas" id="mensaje-areas{{ $grupo->id }}" >Aún no hay áreas asignadas al grupo</li>
                                                                         @endforelse
                                                                     </ul>
+
                                                                 </div>
                                                 
                                                                 <!-- Botón para agregar área -->
@@ -200,19 +201,55 @@
         });
     </script>
 
+
+<script>
+    $(document).ready(function () {
+        // Función para ocultar el mensaje de áreas vacías al agregar una nueva área
+        $('.btn-agregar-area').click(function () {
+            var modalId = $(this).data('modal-id');
+            $('#mensaje-areas' + modalId).hide();
+        });
+
+        // Eliminar área seleccionada
+        $(document).on('click', '.btn-danger', function () {
+            var modalId = $(this).closest('ul').attr('id').split('_').pop();
+            var listItem = $(this).closest('li');
+            listItem.remove();
+        });
+
+        // Observar cambios en los elementos hijos del contenedor de áreas seleccionadas
+        $('.list-group').each(function () {
+            var modalId = $(this).attr('id').split('_').pop();
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    var listLength = $(mutation.target).children('li:not(.no-areas)').length;
+                    if (listLength === 0) {
+                        
+                        $('#mensaje-areas' + modalId).show();
+                    } else {
+                        
+                        $('#mensaje-areas' + modalId).hide();
+                    }
+                });
+            });
+
+            // Configuración del observer
+            var config = { childList: true };
+            observer.observe(this, config);
+        });
+    });
+</script>
+
+
     <script>
         $(document).ready(function () {
-           
-    
+
            
             $('.btn-agregar-area').click(function () {
                 var modalId = $(this).data('modal-id');
                 var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
 
-                // Eliminar área seleccionada
-                $('#modal-agregar-area' + modalId).on('click', '.btn-danger', function () {
-                    $(this).closest('li').remove();
-                });
+                
             });
 
             // Manejar el evento click del botón "Agregar Área"
@@ -266,8 +303,7 @@
 
     <script>
         $(document).ready(function () {
-                
-        
+
             
             // Eliminar área seleccionada
             $(document).on('click', '.btn-quitar-area', function () {
@@ -299,9 +335,6 @@
                 });
             });
 
-            
-
-            
             });
     </script>
 
