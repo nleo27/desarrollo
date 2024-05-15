@@ -88,7 +88,7 @@
                                                                         @forelse($grupo->areas as $area)
                                                                         <li class="list-group-item">
                                                                             {{ $area->nombre }}
-                                                                            <a href="#" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i> Quitar</a>
+                                                                            <a href="#" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i></a>
                                                                         </li>
                                                                         @empty
                                                                         <li class="list-group-item no-areas" id="mensaje-areas{{ $grupo->id }}" >Aún no hay áreas asignadas al grupo</li>
@@ -104,7 +104,7 @@
                                                                 @if ($grupo->areas->isEmpty())
                                                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
                                                                 @else
-                                                                <button type="button" class="btn btn-primary btn-actualizar-areas" data-grupo-id="{{ $grupo->id }}"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                                                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Actualizar</button>
                                                                 @endif
 
                                                              
@@ -202,108 +202,135 @@
     </script>
 
 
-<script>
-    $(document).ready(function () {
-        // Función para ocultar el mensaje de áreas vacías al agregar una nueva área
-        $('.btn-agregar-area').click(function () {
-            var modalId = $(this).data('modal-id');
-            $('#mensaje-areas' + modalId).hide();
-        });
-
-        // Eliminar área seleccionada
-        $(document).on('click', '.btn-danger', function () {
-            var modalId = $(this).closest('ul').attr('id').split('_').pop();
-            var listItem = $(this).closest('li');
-            listItem.remove();
-        });
-
-        // Observar cambios en los elementos hijos del contenedor de áreas seleccionadas
-        $('.list-group').each(function () {
-            var modalId = $(this).attr('id').split('_').pop();
-            var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                    var listLength = $(mutation.target).children('li:not(.no-areas)').length;
-                    if (listLength === 0) {
-                        
-                        $('#mensaje-areas' + modalId).show();
-                    } else {
-                        
-                        $('#mensaje-areas' + modalId).hide();
-                    }
-                });
+    <script>
+        $(document).ready(function () {
+            // Función para ocultar el mensaje de áreas vacías al agregar una nueva área
+            $('.btn-agregar-area').click(function () {
+                var modalId = $(this).data('modal-id');
+                $('#mensaje-areas' + modalId).hide();
             });
 
-            // Configuración del observer
-            var config = { childList: true };
-            observer.observe(this, config);
+            // Observar cambios en los elementos hijos del contenedor de áreas seleccionadas
+            $('.list-group').each(function () {
+                var modalId = $(this).attr('id').split('_').pop();
+                var observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        var listLength = $(mutation.target).children('li:not(.no-areas)').length;
+                        if (listLength === 0) {
+                            
+                            $('#mensaje-areas' + modalId).show();
+                        } else {
+                            
+                            $('#mensaje-areas' + modalId).hide();
+                        }
+                    });
+                });
+
+                // Configuración del observer
+                var config = { childList: true };
+                observer.observe(this, config);
+            });
         });
-    });
-</script>
+    </script>
 
 
     <script>
-        $(document).ready(function () {
+            $(document).ready(function () {
 
-           
-            $('.btn-agregar-area').click(function () {
-                var modalId = $(this).data('modal-id');
-                var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
-
-            });
-
-            // Manejar el evento click del botón "Agregar Área"
-            $(document).on('click', '[id^=agregar_area_]', function () {
-                var modalId = $(this).data('modal-id');
-                var areaId = $('#area_id_' + modalId).val();
-                var areaNombre = $('#area_id_' + modalId + ' option:selected').text();
-                var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
-                           
+            
+                $('.btn-agregar-area').click(function () {
+                    var modalId = $(this).data('modal-id');
+                    var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
+                });
 
                 
-                if (areaId === "") {
-                    alert('Por favor, seleccione un área.');
-                } else if (areasSeleccionadas.find('input[value="' + areaId + '"]').length > 0) {
-                    alert('¡Esta área ya fue agregada!');
-                } else {
-                    areasSeleccionadas.append('<li class="list-group-item">' + areaNombre + '<button type="button" class="btn btn-danger btn-sm float-end"><i class="fas fa-times"></i></button></li>');
-                    // Eliminar el input si ya existe
-                    $('input[name="areas[]"][value="' + areaId + '"]').remove();
+                // Manejar el evento click del botón "Agregar Área"
+                $(document).on('click', '[id^=agregar_area_]', function () {
+                    var modalId = $(this).data('modal-id');
+                    var areaId = $('#area_id_' + modalId).val();
+                    var areaNombre = $('#area_id_' + modalId + ' option:selected').text();
+                    var areasSeleccionadas = $('#areas_seleccionadas_' + modalId);
+                    var areasAgregadas = [];
+
+                    // Obtener IDs de las áreas ya agregadas
+                    areasSeleccionadas.find('a.btn-quitar-area').each(function() {
+                        var areaAgregadaId = $(this).data('area');
+                        areasAgregadas.push(areaAgregadaId);
+                    });
+
+                    // Si no hay áreas ya agregadas, obtener los IDs de las áreas de la lista
+                    if (areasAgregadas.length === 0) {
+                        areasSeleccionadas.find('li').each(function() {
+                            var areaAgregadaId = $(this).data('area-id');
+                            areasAgregadas.push(areaAgregadaId);
+                        });
+                    }
+
+                    console.log('Áreas agregadas:', areasAgregadas);
+
+                    if (areaId === "") {
+                        toastr.error('¡Por favor seleccione una área!', 'Error');
+                        return;
+                    }
+
+                    console.log('Área seleccionada:', areaId);
+
+                    // Si el área seleccionada ya está en la lista de selección
+                    if (areasAgregadas.includes(parseInt(areaId))) {
+                        toastr.error('¡Esta área ya fue agregada!', 'Error');
+                        return;
+                    }
+
+                    // Si no hay problemas, agregar el área a la lista
+                    areasSeleccionadas.append('<li class="list-group-item" data-area-id="' + areaId + '">' + areaNombre + '<button type="button" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="' + modalId + '" data-area="' + areaId + '"><i class="fas fa-times"></i></button></li>');
+
                     // Agregar el input oculto al formulario específico
                     $('#form-agregar-areas' + modalId).append('<input type="hidden" name="areas[]" value="' + areaId + '">');
-                    console.log('Área agregada correctamente:', areaId);
 
-                    
-                }
-            });
-
-            // Manejar el envío del formulario para guardar áreas
-            $('[id^=form-agregar-areas]').submit(function (event) {
-                event.preventDefault();
-
-                var formData = $(this).serialize();
-
-                
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: formData,
-                    success: function (response) {
+                    toastr.success('Área agregada correctamente', 'Éxito');
+                });
                         
-                        window.location.href = "{{ route('create.grupo') }}"; 
-                    },
-                    error: function (xhr, status, error) {
-                        alert('Error al guardar las áreas');
-                        console.error(xhr.responseText);
-                    }
+
+
+                    // Eliminar área seleccionada
+                    $(document).on('click', '.btn-danger', function () {
+                        var modalId = $(this).closest('ul').attr('id').split('_').pop();
+                        var listItem = $(this).closest('li');
+                        var areaId = $(listItem).find('input[type="hidden"]').val(); // Obtener el valor del input oculto dentro del listItem
+                        if (!areaId) {
+                            areaId = listItem.data('area-id'); // Intentar obtener el área id desde el atributo de datos
+                        }
+                        listItem.remove();
+                        $('#form-agregar-areas' + modalId).find('input[value="' + areaId + '"]').remove(); // Remover el input del formulario
+                        
+                    });
+
+                // Manejar el envío del formulario para guardar áreas
+                $('[id^=form-agregar-areas]').submit(function (event) {
+                    event.preventDefault();
+
+                    var formData = $(this).serialize();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: formData,
+                        success: function (response) {
+                            
+                            window.location.href = "{{ route('create.grupo') }}"; 
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error al guardar las áreas');
+                            console.error(xhr.responseText);
+                        }
+                    });
                 });
             });
-        });
     </script>
 
     <script>
         $(document).ready(function () {
 
-            
             // Eliminar área seleccionada
             $(document).on('click', '.btn-quitar-area', function () {
                 var boton = $(this); // Almacenar una referencia al botón
