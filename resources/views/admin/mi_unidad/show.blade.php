@@ -293,6 +293,24 @@
                                 <label for="modulo">Módulo</label>
                                 <input type="text" class="form-control" id="modulo" name="modulo" >
                             </div>
+
+                            <div class="form-group">
+                                <label for="area">Periodo:</label>
+                                <select class="form-select" aria-label="Default select example"  id="periodo_id" name="periodo_id">
+                                @foreach($periodos as $periodo)
+                                    <option value="{{ $periodo->id }}">{{ $periodo->nombre }}</option>
+                                @endforeach    
+                                </select>
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="area">Área:</label>
+                                <select class="form-select" aria-label="Default select example"  id="area_id" name="area_id">
+                                @foreach($areas as $area)
+                                    <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                @endforeach    
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripción</label>
                                 <textarea class="form-control" id="descripcion" name="descripcion" rows="3" ></textarea>
@@ -367,6 +385,24 @@
                                     <div class="form-group">
                                         <label for="modulo">Módulo</label>
                                         <input type="text" class="form-control" value="{{$subcarpeta->modulo}}" id="modulo" name="modulo" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="area">Periodo:</label>
+                                        <select class="form-select" aria-label="Default select example"  id="periodo_id" name="periodo_id">
+                                        @foreach($periodos as $periodo)
+                                            <option value="{{ $periodo->id }}">{{ $periodo->nombre }}</option>
+                                        @endforeach    
+                                        </select>
+                                    </div>
+            
+                                    <div class="form-group">
+                                        <label for="area">Área:</label>
+                                        <select class="form-select" aria-label="Default select example"  id="area_id" name="area_id">
+                                        @foreach($areas as $area)
+                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                        @endforeach    
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>

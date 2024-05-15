@@ -88,7 +88,14 @@ class CarpetaController extends Controller
         $carpeta =Carpeta::findOrFail($id);
         $subcarpetas = $carpeta->carpetasHijas;
         $archivos = $carpeta->archivos;
-        return view('admin.mi_unidad.show', compact('carpeta', 'subcarpetas', 'archivos'));
+        // Obtener el área del usuario si está asignada
+        $area_usuario = Auth::user()->area;
+
+        // Obtener solo los periodos activos
+        $periodos = Periodo::where('periodo_activo', 1)->get();
+        // Listar solo el área del usuario
+        $areas = [$area_usuario];
+        return view('admin.mi_unidad.show', compact('carpeta', 'subcarpetas', 'archivos', 'periodos', 'areas'));
     }
 
     /**
@@ -132,6 +139,8 @@ class CarpetaController extends Controller
         $carpeta->modulo = $request->modulo;
         $carpeta->estante = $request->estante;
         $carpeta->codigo = $request->codigo;
+        $carpeta->id_periodo = $request->periodo_id;
+        $carpeta->id_area = $request->area_id;
         $carpeta->descipcion = $request->descripcion;
         $carpeta->save();
 
@@ -168,6 +177,8 @@ class CarpetaController extends Controller
         $carpeta->modulo = $request->modulo;
         $carpeta->estante = $request->estante;
         $carpeta->codigo = $request->codigo;
+        $carpeta->id_periodo = $request->periodo_id;
+        $carpeta->id_area = $request->area_id;
         $carpeta->descipcion = $request->descripcion;
         $carpeta->save();
 
