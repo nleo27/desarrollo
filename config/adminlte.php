@@ -382,6 +382,13 @@ return [
             'can' => '',
         ],
 
+        [
+            'text' => 'Compartir en grupos',
+            'url' => 'archivo-grupo',
+            'icon' => 'fas fa-share-alt-square',
+            'can' => '',
+        ],
+
         
         ['header' => 'account_settings'],
         [

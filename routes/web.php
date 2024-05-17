@@ -11,6 +11,7 @@ use App\Http\Controllers\RegistroUsuario;
 use App\Http\Controllers\CarpetaController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\GrupoAreaController;
+use App\Http\Controllers\ArchivoGrupoController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -41,6 +42,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/mi_unidad/carpeta/{id}', [CarpetaController::class, 'show'])->name('mi_unidad.carpeta');
     Route::get('/admin/mi_unidad/carpeta', [CarpetaController::class, 'crear_subcarpeta'])->name('mi_unidad.carpeta.crear_subcarpeta');
     Route::put('/admin/mi_unidad', [CarpetaController::class, 'update'])->name('mi_unidad.update');
+
+    Route::get('/archivo-grupo', [ArchivoGrupoController::class, 'create'])->name('archivo-grupo.create');
+
+    Route::get('/archivo-grupo/getArchivos', [ArchivoGrupoController::class, 'getArchivos'])->name('archivo-grupo.getArchivos');
 
     //RUTAS PARA ARCHIVOS
    
