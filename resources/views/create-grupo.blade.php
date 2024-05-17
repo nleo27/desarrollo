@@ -85,7 +85,7 @@
                                                                     <label for="areas_seleccionadas">Áreas Seleccionadas:</label>
                                                                     <ul class="list-group" id="areas_seleccionadas_{{ $grupo->id }}">
                                                                         <!-- Aquí se agregarán las áreas seleccionadas -->
-                                                                        @forelse($grupo->areas as $area)
+                                                                        @forelse($grupo->area as $area)
                                                                         <li class="list-group-item">
                                                                             {{ $area->nombre }}
                                                                             <a href="#" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i></a>
@@ -101,7 +101,7 @@
                                                                 <button type="button" class="btn btn-success btn-agregar-area" id="agregar_area_{{ $grupo->id }}" data-modal-id="{{ $grupo->id }}"><i class="fas fa-plus"></i> Agregar Área</button>
                                                 
                                                                 <!-- Botón para guardar o actualizar áreas -->
-                                                                @if ($grupo->areas->isEmpty())
+                                                                @if ($grupo->area->isEmpty())
                                                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
                                                                 @else
                                                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Actualizar</button>

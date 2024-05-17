@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('grupo_area', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('grupo_id');
-            $table->unsignedBigInteger('area_id');
+            $table->unsignedBigInteger('area_id')->nullable();;
             $table->timestamps();
 
             $table->foreign('grupo_id')

@@ -75,8 +75,12 @@ class GrupoAreaController extends Controller
             return Redirect::back();
         }
     
-        // Eliminar la relación
-        $relacion->delete();
+        // Actualizar el campo area_id a null en la tabla grupo_area
+        $relacion->update(['area_id' => null]);
     
+       
+        return Redirect::back();
     }
+
+    
 }

@@ -11,7 +11,7 @@ class Grupo extends Model
 
     protected $fillable = ['nombre', 'descripcion'];
 
-    public function areas()
+    public function area()
     {
         return $this->belongsToMany(Area::class, 'grupo_area', 'grupo_id', 'area_id');
     }

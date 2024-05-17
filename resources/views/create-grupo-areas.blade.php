@@ -119,9 +119,11 @@
                 <div class="col-sm-12">
                     <ol class="breadcrumb float-sm-right">
 
+                        @if(isset($grupoId))
                         <div class="card-tools mr-1">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-registrar-documento"><i class="fas fas fa-file-upload"></i> Agregar Documento</button>
                         </div>
+                        @endif
 
                     </ol>
                 </div>
@@ -129,29 +131,35 @@
         </div>
     </div>
     <hr>
-
-    <!-- Tabla de lista de archivos -->
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center table-hover" id="lista-archivos">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Ruta</th>
-                        <th>Grupo_Id</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                  
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                   
-                </tbody>
-            </table>
-        </div>
-    </div>
+    
+        @if(isset($grupoId))
+        <!-- Tabla de lista de archivos -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center table-hover" id="lista-archivos">
+                        <!-- Encabezados de la tabla -->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Ruta</th>
+                                <th>Grupo_Id</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <!-- Cuerpo de la tabla -->
+                        <tbody>
+                            <!-- Aquí puedes iterar sobre los archivos y mostrarlos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @else
+    
+        <!-- Mensaje de que el área no pertenece a ningún grupo -->
+        <div class="alert alert-warning">{{ $mensaje }}</div>
+        @endif
 
     <!-- Modal Registrar Documentos -->
     <div class="modal fade" id="modal-registrar-documento">
@@ -165,26 +173,16 @@
                 </div>
                 <div class="modal-body">
                     <!-- Formulario principal -->
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('archivo-grupo.store') }}" method="POST" enctype="multipart/form-data">
 
                         @csrf
+                        <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}">
                         
                         <div class="form-group">
                             <label for="nombre_archivo">Nombre del Documento</label>
                             <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
                         </div>
-                        <div class="form-group">
-                            <label for="folios">N° Folios</label>
-                            <input type="text" class="form-control" id="folios" name="folios">
-                        </div>
-                        <div class="form-group">
-                            <label for="personal_dirigido">Personal Dirigido</label>
-                            <input type="text" class="form-control" id="personal_dirigido" name="personal_dirigido">
-                        </div>
-                        <div class="form-group">
-                            <label for="ubicacion">Ubicación</label>
-                            <input type="text" class="form-control" id="ubicacion" name="ubicacion">
-                        </div>
+                      
                         <div class="form-group">
                             <label for="descripcion">Descripción</label>
                             <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
@@ -296,6 +294,8 @@
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap4.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+
+
 <script>
    $(document).ready(function() {
         $('#lista-archivos').DataTable({
@@ -303,11 +303,27 @@
             "serverSide": true,
             "ajax": "{{ route('archivo-grupo.getArchivos') }}",
             "columns": [
-                { "data": "id" },
-                { "data": "nombre" },
-                { "data": "ruta_archivo" },
-                { "data": "grupo_area_id" },
-                { "data": "descripcion" },
+                { data: 'id' },
+                { data: 'nombre' },
+                { data: 'ruta_archivo',
+                    render: function(data, type, row) {
+                        var extension = data.split('.').pop().toLowerCase();
+                        var icono = '';
+
+                        if (extension === 'png' || extension === 'jpg' || extension === 'jpeg') {
+                            icono = '<img src="{{ url("/imagenes/iconos/imagen01.png") }}" width="25px">';
+                        } else if (extension === 'pdf') {
+                            icono = '<img src="{{ url("/imagenes/iconos/pdf.png") }}" width="25px">';
+                        } else if (extension === 'docx' || extension === 'doc') {
+                            icono = '<img src="{{ url("/imagenes/iconos/palabra.png") }}" width="25px">';
+                        } else if (extension === 'xlsx') {
+                            icono = '<img src="{{ url("/imagenes/iconos/excel.png") }}" width="25px">';
+                        }
+
+                        return icono + data;
+                    } },
+                { data: 'grupo_area_id' },
+                { data: 'descripcion'},
                 {
                     data: null,
                     render: function(data, type, row) {

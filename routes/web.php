@@ -45,7 +45,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/archivo-grupo', [ArchivoGrupoController::class, 'create'])->name('archivo-grupo.create');
 
+    Route::post('/archivo-grupo', [ArchivoGrupoController::class, 'store'])->name('archivo-grupo.store');
+
     Route::get('/archivo-grupo/getArchivos', [ArchivoGrupoController::class, 'getArchivos'])->name('archivo-grupo.getArchivos');
+
+    
 
     //RUTAS PARA ARCHIVOS
    
@@ -65,6 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/guardar-areas', [GrupoAreaController::class, 'guardarAreas'])->name('guardar_areas');
 
     Route::post('eliminar-area', [GrupoAreaController::class, 'quitarArea'])->name('eliminar_area');
+
+   
     
    
 });
