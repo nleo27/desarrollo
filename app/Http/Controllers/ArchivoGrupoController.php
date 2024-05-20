@@ -55,7 +55,7 @@ class ArchivoGrupoController extends Controller
     {
         // Obtener el usuario autenticado
         $usuario = Auth::user();
-
+               
         // Verificar si el usuario está autenticado
         if (!$usuario) {
             // Manejar el caso en que el usuario no esté autenticado
@@ -165,4 +165,41 @@ class ArchivoGrupoController extends Controller
         $archivo->delete();
 
     }
+
+    public function updateAjax(Request $request, $id)
+    {
+        // Encuentra el archivo por su ID
+        $archivo = ArchivoGrupo::findOrFail($id);
+
+        // Validar la solicitud
+        $request->validate([
+            'edit_archivo' => 'required|string|max:255',
+            'edit_descripcion' => 'nullable|string|max:255',
+            'upload' => 'nullable|array|max:5', // Máximo 5 archivos permitidos
+            'upload.*' => 'nullable|file|mimes:doc,docx,pdf,jpeg,png,jpg|max:2048', // Tipos y tamaño de archivo permitidos
+        ]);
+
+        // Actualizar los campos del archivo
+        $archivo->nombre = $request->input('edit_archivo');
+        $archivo->descripcion = $request->input('edit_descripcion');
+
+        // Reemplazar los archivos si se han subido nuevos
+        if ($request->hasFile('upload')) {
+            foreach ($request->file('upload') as $file) {
+                // Guardar el archivo en el almacenamiento
+                $archivo->ruta_archivo = $file->store('grupo_' . $archivo->grupo_area_id);
+            }
+        }
+
+        // Guardar los cambios en la base de datos
+        $archivo->save();
+
+        // Retorna una respuesta JSON exitosa
+        return response()->json(['message' => 'Archivo actualizado correctamente'], 200);
+    }
+
+
+
+
+
 }

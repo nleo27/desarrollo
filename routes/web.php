@@ -51,6 +51,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/eliminar-archivo-grupo/{id}', [ArchivoGrupoController::class, 'eliminar'])->name('archivoGrupo.eliminar');
 
+    Route::put('/archivo-grupo/{id}', [ArchivoGrupoController::class, 'updateAjax'])->name('archivo-grupo.updateAjax');
+
+   
+
     
 
     //RUTAS PARA ARCHIVOS

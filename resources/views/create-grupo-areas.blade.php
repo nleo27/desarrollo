@@ -319,15 +319,15 @@
                 </div>
                 <div class="modal-body">
                     <!-- Formulario principal -->
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form id="edit-form" action="" method="POST" enctype="multipart/form-data">
 
-                        @csrf
-                        <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}" hidden>
+                       
+                        <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}">
                         
                         <div class="form-group">
                             <label for="nombre_archivo">Nombre del Documento</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
+                                <input type="text" class="form-control" id="edit_archivo" name="edit_archivo" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fas fa-file-upload"></i></span>
                                 </div>
@@ -336,7 +336,7 @@
                       
                         <div class="form-group">
                             <label for="descripcion">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                            <textarea class="form-control" id="edit_descripcion" name="edit_descripcion" rows="3"></textarea>
                         </div>
 
                         <div class="wrapper">
@@ -351,7 +351,7 @@
                                         </label>
                                 </div>
         
-                                <div id="filewrapper">
+                                <div id="edit-filewrapper">
                                     <h3 class="uploaded">Documentos subidos</h3>
                                 </div>
                             </div>
@@ -359,7 +359,7 @@
                         
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Crear Archivo</button>
+                            <button type="button" id="btn-update" class="btn btn-primary">Actualizar Archivo</button>
                         </div>
                     </form>
                     <!-- Fin del formulario principal -->
@@ -367,19 +367,19 @@
                 
                 </div>
                 <script>
-                    window.addEventListener("load",()=>{
-                        const input = document.getElementById("upload");
-                        const filewrapper = document.getElementById("filewrapper");
-                
-                        input.addEventListener("change",(e)=>{
-                            for (const file of e.target.files) {
+                       window.addEventListener("load", () => {
+                            const input = document.getElementById("upload");
+                            const filewrapper = document.getElementById("edit-filewrapper");
+
+                            input.addEventListener("change",(e)=>{
+                                for (const file of e.target.files) {
                                 let fileName = file.name;
                                 let filetype = fileName.split(".").pop();
                                 fileshow(fileName, filetype);
-                            }
-                        })
-                
-                        const fileshow=(fileName, filetype)=>{
+                                }
+                            })
+
+                            const fileshow=(fileName, filetype)=>{
                             const showfileboxElem= document.createElement("div");
                             showfileboxElem.classList.add("showfilebox");
                             const leftElem = document.createElement("div");
@@ -404,8 +404,7 @@
                                 filewrapper.removeChild(showfileboxElem);
                             })
                         }
-                
-                    })
+                        });
                 </script>
             </div>
         </div>
@@ -575,19 +574,69 @@
         });
     });
 
-    // Evento de clic para editar el archivo
-    $('#lista-archivos').on('click', '.editar-archivo', function() {
+        // Evento de clic para abrir el modal y Eliminar
+        $('#lista-archivos').on('click', '.editar-archivo', function() {
         var archivoData = $(this).data('inform');
-        console.log(archivoData);
         
-       
-    });
+            $('#edit_archivo').val(archivoData.nombre);
+            $('#edit_descripcion').val(archivoData.descripcion);
+        
+        
+        });
+
+   
   
 
 
 
 
     
+</script>
+
+<script>
+$(document).ready(function() {
+    // Evento de clic para abrir el modal y eliminar
+    $('#lista-archivos').on('click', '.editar-archivo', function() {
+        var archivoData = $(this).data('inform');
+        $('#edit_archivo').val(archivoData.nombre);
+        $('#edit_descripcion').val(archivoData.descripcion);
+
+        // Almacena los datos del archivo en el botón de actualización
+        $('#btn-update').data('archivo', archivoData);
+    });
+
+    // Evento de clic para actualizar el archivo
+    $('#btn-update').click(function() {
+        // Recupera los datos del archivo del botón de actualización
+        var archivoData = $(this).data('archivo');
+        console.log(archivoData);
+        var formData = new FormData($('#edit-form')[0]);
+        console.log(formData);
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: "/archivo-grupo/" + archivoData.id,
+            type: 'PUT',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+            'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                // Manejar la respuesta de la actualización
+                console.log(response);
+                // Por ejemplo, cerrar el modal después de una actualización exitosa
+                $('#modal-editar-documento').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                // Manejar errores de la solicitud AJAX
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
 </script>
 
 @endsection
