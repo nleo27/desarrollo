@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('title', 'Compartir grupos')
@@ -114,7 +115,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Compartir Archivos en grupos</h1>
+                    <h1 class="m-0">COMPARTIR ARCHIVOS EN EL GRUPO</h1>
                 </div>
                 <div class="col-sm-12">
                     <ol class="breadcrumb float-sm-right">
@@ -165,8 +166,8 @@
     <div class="modal fade" id="modal-registrar-documento">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Registrar Documentos</h4>
+                <div class="modal-header bg-primary text-white">
+                    <h4 class="modal-title"><i class="fas fas fa-file-upload"></i> Registrar Documentos</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -176,11 +177,16 @@
                     <form action="{{ route('archivo-grupo.store') }}" method="POST" enctype="multipart/form-data">
 
                         @csrf
-                        <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}">
+                        <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}" hidden>
                         
                         <div class="form-group">
                             <label for="nombre_archivo">Nombre del Documento</label>
-                            <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fas fa-file-upload"></i></span>
+                                </div>
+                            </div>
                         </div>
                       
                         <div class="form-group">
@@ -262,20 +268,145 @@
 
       <!-- Modal para visualizar archivos -->
       <div class="modal fade" id="ver_archivo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fas fa-file-upload"></i> Detalle de Archivo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="text-align: center" id="modal-body-content">
+                        <div id="archivo-info"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para eliminar-->
+        <div class="modal fade" id="eliminar-archivos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="eliminarModalLongTitle"><i class="fas fa-trash-alt"></i> Eliminar archivo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-body-eliminar">
+                        <!-- Contenido se actualizará dinámicamente -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger" id="confirmar-eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Editar Documentos -->
+    <div class="modal fade" id="modal-editar-documento">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Detalle de Archivo</h5>
+                <div class="modal-header bg-primary text-white">
+                    <h4 class="modal-title"><i class="fas fas fa-file-upload"></i> Editar Documentos</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="text-align: center" id="modal-body-content">
-                    <div id="archivo-info"></div>
+                <div class="modal-body">
+                    <!-- Formulario principal -->
+                    <form action="" method="POST" enctype="multipart/form-data">
+
+                        @csrf
+                        <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}" hidden>
+                        
+                        <div class="form-group">
+                            <label for="nombre_archivo">Nombre del Documento</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fas fa-file-upload"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                      
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                        </div>
+
+                        <div class="wrapper">
+                            <div class="box">
+                                <div class="input-bx">
+                                    <h2 class="upload-area-title">Subir Archivos</h2>
+                                
+                                        <input type="file" id="upload" name="upload[]" accept=".doc, .docx, .pdf, .jpeg, .png, .jpg" multiple hidden>
+                                        <label for="upload" class="uploadlabel">
+                                            <span><i class="fas fa-upload"></i></span>
+                                            <p> Haz click para subir tus archivos</p>
+                                        </label>
+                                </div>
+        
+                                <div id="filewrapper">
+                                    <h3 class="uploaded">Documentos subidos</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Crear Archivo</button>
+                        </div>
+                    </form>
+                    <!-- Fin del formulario principal -->
+
+                
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+                <script>
+                    window.addEventListener("load",()=>{
+                        const input = document.getElementById("upload");
+                        const filewrapper = document.getElementById("filewrapper");
+                
+                        input.addEventListener("change",(e)=>{
+                            for (const file of e.target.files) {
+                                let fileName = file.name;
+                                let filetype = fileName.split(".").pop();
+                                fileshow(fileName, filetype);
+                            }
+                        })
+                
+                        const fileshow=(fileName, filetype)=>{
+                            const showfileboxElem= document.createElement("div");
+                            showfileboxElem.classList.add("showfilebox");
+                            const leftElem = document.createElement("div");
+                            leftElem.classList.add("left");
+                            const fileTypeElem = document.createElement("span");
+                            fileTypeElem.classList.add("filetype");
+                            fileTypeElem.innerHTML = filetype;
+                            leftElem.append(fileTypeElem);
+                            const filetitleElem = document.createElement("h3");
+                            filetitleElem.innerHTML=fileName;
+                            leftElem.append(filetitleElem);
+                            showfileboxElem.append(leftElem);
+                            const rightElem = document.createElement("div");
+                            rightElem.classList.add("right");
+                            showfileboxElem.append(rightElem);
+                            const crossElem = document.createElement("span");
+                            crossElem.innerHTML="&#215;";
+                            rightElem.append(crossElem);
+                            filewrapper.append(showfileboxElem);
+                
+                            crossElem.addEventListener("click", ()=>{
+                                filewrapper.removeChild(showfileboxElem);
+                            })
+                        }
+                
+                    })
+                </script>
             </div>
         </div>
     </div>
@@ -293,11 +424,13 @@
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap4.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 
 
 <script>
    $(document).ready(function() {
+    
         $('#lista-archivos').DataTable({
             "processing": true,
             "serverSide": true,
@@ -334,11 +467,10 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="accionesButton${data.id}">
                                     <a href="#" class="dropdown-item ver-archivo" data-toggle="modal" data-target="#ver_archivo_modal" data-info='${JSON.stringify(data)}'><i class="fas fa-eye text-info"></i> Ver</a>
-                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#edit-file${data.id}"><i class="fas fa-edit text-warning"></i> Editar</button>
-                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#confirm-delete${data.id}"><i class="fas fa-trash-alt text-danger"></i> Eliminar</button>
-                                    <a href="" class="dropdown-item" download><i class="fas fa-file-download text-secondary"></i> Descargar</a>
-                                    
-                                    
+                                    <a href="#" class="dropdown-item editar-archivo" data-toggle="modal" data-target="#modal-editar-documento" data-inform='${JSON.stringify(data)}'><i class="fas fa-edit text-warning"></i> Editar</a>
+                                    <a href="#" class="dropdown-item eliminar-archivo" data-toggle="modal" data-target="#eliminar-archivos" data-informacion='${JSON.stringify(data)}'><i class="fas fa-trash-alt text-danger"></i>Eliminar</a>
+                                    <a href="{{ asset('storage/Grupo_${data.grupo_area_id}/${data.ruta_archivo}') }}" class="dropdown-item" download><i class="fas fa-file-download text-secondary"></i> Descargar</a>
+                              
                                 </div>
                             </div>
                         `;
@@ -356,6 +488,104 @@
             }
         });
     });
+
+        
+    // Evento de clic para abrir el modal
+        $('#lista-archivos').on('click', '.ver-archivo', function() {
+        
+            var archivoData = $(this).data('info');
+            
+                  
+            // Actualizar el título del modal
+            $('#exampleModalLongTitle').text(archivoData.nombre);
+
+            // Obtener la extensión del archivo después de que se ha construido el HTML
+            var nombreArchivo = archivoData.ruta_archivo;
+            
+            var extension = nombreArchivo.split('.').pop().toLowerCase();
+            
+            // Limpiar el contenido anterior del cuerpo del modal
+            $('#modal-body-content').empty();
+
+            // Mostrar la información del archivo en el cuerpo del modal
+            var modalBodyContent = '';
+
+            if (extension === "png" || extension === "jpg" || extension === "jpeg") {
+                modalBodyContent += `<img src="${archivoData.url}" width="100%" alt="Imagen">`;
+            } else if (extension === "pdf") {
+                modalBodyContent += '<iframe src="' + archivoData.url + '" width="100%" height="420px"></iframe>';
+            } else if (extension === "docx" || extension === "doc") {
+                modalBodyContent += '<img src="{{asset("imagenes/iconos/palabra.png")}}" width="20%"><br><br>';
+                modalBodyContent += '<a href="' + archivoData.url + '" class="btn btn-success btn-lg mb-1"><i class="fas fa-file-download"></i> Descargar</a>';
+            } else if (extension === "xlsx") {
+                modalBodyContent += '<img src="{{asset("imagenes/iconos/excel.png")}}" width="20%"><br><br>';
+                modalBodyContent += '<a href="' + archivoData.url + '" class="btn btn-success btn-lg mb-1"><i class="fas fa-file-download"></i> Descargar</a>';
+            }
+
+            $('#modal-body-content').append(modalBodyContent);
+
+            
+        });
+
+        // Evento de clic para abrir el modal y Eliminar
+        $('#lista-archivos').on('click', '.eliminar-archivo', function() {
+        var archivoData = $(this).data('informacion');
+        
+        // Limpiar el contenido anterior del cuerpo del modal
+        $('#modal-body-eliminar').empty();
+
+        // Mostrar la información del archivo en el cuerpo del modal
+        var modalBodyContent = `<p>¿Desea eliminar el archivo: <strong>${archivoData.nombre}</strong>?</p>`;
+        
+        $('#modal-body-eliminar').append(modalBodyContent);
+
+        // Guardar la información del archivo en un atributo de datos del botón de confirmación
+        $('#confirmar-eliminar').data('archivo-id', archivoData.id);
+        });
+
+    // Evento de clic para confirmar la eliminación
+    $('#confirmar-eliminar').on('click', function() {
+        var archivoId = $(this).data('archivo-id');
+
+        // Obtener el token CSRF
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        // Realizar la solicitud AJAX para eliminar el archivo
+        $.ajax({
+            url: '/eliminar-archivo-grupo/' + archivoId,
+            type: 'POST',
+            data: {
+                _method: 'DELETE',
+                _token: csrfToken
+            },
+            success: function(response) {
+                toastr.success('Área Eliminada correctamente', 'Éxito');
+
+                window.location.href = "{{ route('archivo-grupo.create') }}"; 
+                
+                console.log(response);
+                // Cerrar el modal
+                $('#eliminar-archivos').modal('hide');
+                // Actualizar la lista de archivos si es necesario
+            },
+            error: function(xhr) {
+                // Manejar el error
+                console.log(xhr.responseText);
+            }
+        });
+    });
+
+    // Evento de clic para editar el archivo
+    $('#lista-archivos').on('click', '.editar-archivo', function() {
+        var archivoData = $(this).data('inform');
+        console.log(archivoData);
+        
+       
+    });
+  
+
+
+
 
     
 </script>

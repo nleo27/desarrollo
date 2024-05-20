@@ -49,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/archivo-grupo/getArchivos', [ArchivoGrupoController::class, 'getArchivos'])->name('archivo-grupo.getArchivos');
 
+    Route::delete('/eliminar-archivo-grupo/{id}', [ArchivoGrupoController::class, 'eliminar'])->name('archivoGrupo.eliminar');
+
     
 
     //RUTAS PARA ARCHIVOS

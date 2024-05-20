@@ -582,7 +582,8 @@
                 "infoFiltered": "(filtrado de _MAX_ registros totales)",
                 "search": "Buscar"
             }
-        })});
+        })
+    });
 
         // Evento de clic para abrir el modal
         $('#lista-documentos').on('click', '.ver-archivo', function() {

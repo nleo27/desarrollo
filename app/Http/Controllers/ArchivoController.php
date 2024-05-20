@@ -93,7 +93,7 @@ class ArchivoController extends Controller
         $archivos = Archivo::select('id', 'nombre', 'nombre_archivo', 'estado_archivo')->where('carpeta_id', $id)->get();
     
         // Agrega la URL del archivo a cada archivo en la colección
-        $archivos->transform(function ($archivo) use ($id) {
+            $archivos->transform(function ($archivo) use ($id) {
             $rutaArchivo = 'storage/' . $id . '/' . $archivo->nombre;
             $archivo->url = asset($rutaArchivo); // Genera la URL correcta para el almacenamiento privado
             return $archivo;
