@@ -325,7 +325,7 @@
                         <input type="text" class="form-control" id="grupo_id" name="grupo_id" value="{{ $grupoId }}">
                         
                         <div class="form-group">
-                            <label for="nombre_archivo">Nombre del Documento</label>
+                            <label for="edit_archivo">Nombre del Documento</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" id="edit_archivo" name="edit_archivo" required>
                                 <div class="input-group-append">
@@ -335,7 +335,7 @@
                         </div>
                       
                         <div class="form-group">
-                            <label for="descripcion">Descripción</label>
+                            <label for="edit_descripcion">Descripción</label>
                             <textarea class="form-control" id="edit_descripcion" name="edit_descripcion" rows="3"></textarea>
                         </div>
 
@@ -539,104 +539,97 @@
         $('#modal-body-eliminar').append(modalBodyContent);
 
         // Guardar la información del archivo en un atributo de datos del botón de confirmación
+        
         $('#confirmar-eliminar').data('archivo-id', archivoData.id);
         });
 
-    // Evento de clic para confirmar la eliminación
-    $('#confirmar-eliminar').on('click', function() {
-        var archivoId = $(this).data('archivo-id');
+        // Evento de clic para confirmar la eliminación
+        $('#confirmar-eliminar').on('click', function() {
+            var archivoId = $(this).data('archivo-id');
 
-        // Obtener el token CSRF
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            // Obtener el token CSRF
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-        // Realizar la solicitud AJAX para eliminar el archivo
-        $.ajax({
-            url: '/eliminar-archivo-grupo/' + archivoId,
-            type: 'POST',
-            data: {
-                _method: 'DELETE',
-                _token: csrfToken
-            },
-            success: function(response) {
-                toastr.success('Área Eliminada correctamente', 'Éxito');
+            // Realizar la solicitud AJAX para eliminar el archivo
+            $.ajax({
+                url: '/eliminar-archivo-grupo/' + archivoId,
+                type: 'POST',
+                data: {
+                    _method: 'DELETE',
+                    _token: csrfToken
+                },
+                success: function(response) {
+                    toastr.success('Área Eliminada correctamente', 'Éxito');
 
-                window.location.href = "{{ route('archivo-grupo.create') }}"; 
-                
-                console.log(response);
-                // Cerrar el modal
-                $('#eliminar-archivos').modal('hide');
-                // Actualizar la lista de archivos si es necesario
-            },
-            error: function(xhr) {
-                // Manejar el error
-                console.log(xhr.responseText);
-            }
+                    window.location.href = "{{ route('archivo-grupo.create') }}"; 
+                    
+                    console.log(response);
+                    // Cerrar el modal
+                    $('#eliminar-archivos').modal('hide');
+                    // Actualizar la lista de archivos si es necesario
+                },
+                error: function(xhr) {
+                    // Manejar el error
+                    console.log(xhr.responseText);
+                }
+            });
         });
-    });
 
-        // Evento de clic para abrir el modal y Eliminar
+        // Evento de clic para abrir el modal y editar
         $('#lista-archivos').on('click', '.editar-archivo', function() {
-        var archivoData = $(this).data('inform');
-        
+            var archivoData = $(this).data('inform');
+
             $('#edit_archivo').val(archivoData.nombre);
             $('#edit_descripcion').val(archivoData.descripcion);
-        
-        
+
+            // Almacena los datos del archivo en el botón de actualización
+            $('#btn-update').data('archivo', archivoData);
+            
         });
 
-   
-  
+        // Evento de clic para actualizar el archivo
+        $('#btn-update').click(function() {
+            var archivoData = $(this).data('archivo');
+            var formData = new FormData();
 
+            formData.append('edit_archivo', $('#edit_archivo').val());
+            formData.append('edit_descripcion', $('#edit_descripcion').val());
+            
 
+            var files = $('#upload')[0].files;
+            if (files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    formData.append('upload[]', files[i]);
+                }
+            }
 
+            console.log([...formData.entries()]);
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            
+            $.ajax({
+                url: "/archivo-grupo/" + archivoData.id,
+                type: 'POST',
+                data: formData,
+                headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                contentType: false,
+                processData: false,
+
+                success: function(response) {
+                    console.log(response);
+                    $('#modal-editar-documento').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON.message;
+                    toastr.error(errorMessage, 'Error');
+                }
+            });
+        });
 
     
 </script>
 
-<script>
-$(document).ready(function() {
-    // Evento de clic para abrir el modal y eliminar
-    $('#lista-archivos').on('click', '.editar-archivo', function() {
-        var archivoData = $(this).data('inform');
-        $('#edit_archivo').val(archivoData.nombre);
-        $('#edit_descripcion').val(archivoData.descripcion);
-
-        // Almacena los datos del archivo en el botón de actualización
-        $('#btn-update').data('archivo', archivoData);
-    });
-
-    // Evento de clic para actualizar el archivo
-    $('#btn-update').click(function() {
-        // Recupera los datos del archivo del botón de actualización
-        var archivoData = $(this).data('archivo');
-        console.log(archivoData);
-        var formData = new FormData($('#edit-form')[0]);
-        console.log(formData);
-
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-        $.ajax({
-            url: "/archivo-grupo/" + archivoData.id,
-            type: 'PUT',
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-            'X-CSRF-TOKEN': csrfToken
-            },
-            success: function(response) {
-                // Manejar la respuesta de la actualización
-                console.log(response);
-                // Por ejemplo, cerrar el modal después de una actualización exitosa
-                $('#modal-editar-documento').modal('hide');
-            },
-            error: function(xhr, status, error) {
-                // Manejar errores de la solicitud AJAX
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
-</script>
+   
 
 @endsection

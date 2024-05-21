@@ -7,6 +7,7 @@ use App\Models\ArchivoGrupo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log; // Asegúrate de importar la clase Log
 
 class ArchivoGrupoController extends Controller
 {
@@ -168,28 +169,46 @@ class ArchivoGrupoController extends Controller
 
     public function updateAjax(Request $request, $id)
     {
-        // Encuentra el archivo por su ID
+        
         $archivo = ArchivoGrupo::findOrFail($id);
 
         // Validar la solicitud
         $request->validate([
-            'edit_archivo' => 'required|string|max:255',
+            'edit_archivo' => 'nullable|string|max:255',
             'edit_descripcion' => 'nullable|string|max:255',
             'upload' => 'nullable|array|max:5', // Máximo 5 archivos permitidos
-            'upload.*' => 'nullable|file|mimes:doc,docx,pdf,jpeg,png,jpg|max:2048', // Tipos y tamaño de archivo permitidos
+            'upload.*' => 'nullable|file|mimes:doc,docx,pdf,jpeg,png,jpg|max:3072', // Tipos y tamaño de archivo permitidos
         ]);
+
+        
 
         // Actualizar los campos del archivo
         $archivo->nombre = $request->input('edit_archivo');
         $archivo->descripcion = $request->input('edit_descripcion');
 
-        // Reemplazar los archivos si se han subido nuevos
-        if ($request->hasFile('upload')) {
-            foreach ($request->file('upload') as $file) {
-                // Guardar el archivo en el almacenamiento
-                $archivo->ruta_archivo = $file->store('grupo_' . $archivo->grupo_area_id);
+         // Reemplazar los archivos si se han subido nuevos
+         if ($request->hasFile('upload')) {
+            // Generar la ruta completa del archivo existente
+            $existingFilePath = 'grupo_' . $archivo->grupo_area_id . '/' . $archivo->ruta_archivo;
+                        
+            // Eliminar el archivo existente
+            if ($archivo->ruta_archivo && Storage::exists($existingFilePath)) {
+                Log::info('Archivo existente encontrado y será eliminado.');
+                Storage::delete($existingFilePath);
+            } else {
+                Log::warning('Archivo existente no encontrado en el almacenamiento.');
             }
+
+            // Guardar el nuevo archivo
+            $file = $request->file('upload')[0];
+            // Generar un nombre único para el archivo
+            $filename = time() . '_' . $file->getClientOriginalName();
+            // Guardar el archivo en el almacenamiento
+            $path = $file->storeAs('grupo_' . $archivo->grupo_area_id, $filename);
+            // Guardar la ruta del archivo
+            $archivo->ruta_archivo = $filename;
         }
+
 
         // Guardar los cambios en la base de datos
         $archivo->save();
