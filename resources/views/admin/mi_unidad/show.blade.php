@@ -171,6 +171,11 @@
                                 <input type="text" class="form-control" id="nombre_archivo" name="nombre_archivo" required>
                             </div>
                             <div class="form-group">
+                                    <label for="fecha_archivo">Fecha del Documento:</label>
+                                    <input type="date" class="form-control" id="fecha_archivo" name="fecha_archivo" required>
+                                    <span id="fecha_archivo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
                                 <label for="folios">N° Folios</label>
                                 <input type="text" class="form-control" id="folios" name="folios">
                             </div>
@@ -574,6 +579,7 @@
                     }
                 }
             ],
+            "order": [[ 0, "desc" ]],
             "language": {
                 "lengthMenu": "Ver _MENU_ registros por página",
                 "zeroRecords": "Nada encontrado - disculpa",

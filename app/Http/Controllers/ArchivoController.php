@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Carpeta;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log; // Asegúrate de importar la clase Log
 use Illuminate\Support\Facades\Session;
 
 class ArchivoController extends Controller
@@ -65,6 +66,7 @@ class ArchivoController extends Controller
                 $archivo->nombre = $fileName;
                 $archivo->estado_archivo = 'privado';
                 $archivo->nombre_archivo = $request->nombre_archivo;
+                $archivo->fecha_archivo = $request->fecha_archivo;
                 $archivo->folio = $request->folios;
                 $archivo->personal_dirigido = $request->personal_dirigido;
                 $archivo->ubicacion = $request->ubicacion;
@@ -90,7 +92,13 @@ class ArchivoController extends Controller
 
     public function getArchivos($id)
     {
-        $archivos = Archivo::select('id', 'nombre', 'nombre_archivo', 'estado_archivo')->where('carpeta_id', $id)->get();
+        $archivos = Archivo::select('id', 'nombre', 'nombre_archivo', 'estado_archivo', 'created_at')
+                        ->where('carpeta_id', $id)
+                        ->get();
+        // Depuración: Verifica el orden de los archivos
+    foreach ($archivos as $archivo) {
+        Log::info("Archivo ID: {$archivo->id}, Fecha de creación: {$archivo->created_at}");
+    }
     
         // Agrega la URL del archivo a cada archivo en la colección
             $archivos->transform(function ($archivo) use ($id) {

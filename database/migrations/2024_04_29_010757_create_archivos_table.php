@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre')->nullable();
             $table->string('nombre_archivo')->nullable();
+            $table->date('fecha_archivo')->nullable();
             $table->string('estado_archivo')->nullable();
             $table->string('folio')->nullable();
             $table->string('personal_dirigido')->nullable();
