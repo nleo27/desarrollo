@@ -88,7 +88,7 @@
                                                                         @forelse($grupo->area as $area)
                                                                         <li class="list-group-item">
                                                                             {{ $area->nombre }}
-                                                                            <a href="#" class="btn btn-danger btn-sm float-end btn-quitar-area" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i></a>
+                                                                            <a href="#" class="btn btn-warning btn-sm float-end btn-quitar-area" id="eliminar_areas" data-grupo="{{ $grupo->id }}" data-area="{{ $area->id }}"><i class="fas fa-times"></i></a>
                                                                         </li>
                                                                         @empty
                                                                         <li class="list-group-item no-areas" id="mensaje-areas{{ $grupo->id }}" >Aún no hay áreas asignadas al grupo</li>
@@ -332,11 +332,27 @@
         $(document).ready(function () {
 
             // Eliminar área seleccionada
-            $(document).on('click', '.btn-quitar-area', function () {
+            $(document).on('click', '#eliminar_areas', function () {
+                
                 var boton = $(this); // Almacenar una referencia al botón
-
                 var grupoId = boton.data('grupo');
                 var areaId = boton.data('area');
+
+                // Obtener el elemento ul por su id
+                var lista = $('#areas_seleccionadas_' + grupoId);
+
+                // Contar el número de áreas
+                var totalItems = lista.find('.list-group-item').length; // Busca elementos con la clase 'list-group-item'
+
+                // Mostrar el total en la consola para verificar
+                console.log("hay:", totalItems);
+
+                // Validar si hay solo dos áreas y mostrar mensaje de error si es así
+                if (totalItems <= 2) {
+                    toastr.error('No se puede eliminar el área porque se necesitan al menos dos áreas para un grupo.', 'Error');
+                    return; // Salir de la función si hay solo dos áreas
+                }
+               
 
                 // Eliminar el área del grupo
                 $.ajax({
@@ -348,10 +364,15 @@
                         area_id: areaId
                     },
                     success: function (response) {
-                        // Quitar el área de la lista
+                        // Verificar si hay solo dos o menos áreas después de la eliminación
+                    var totalItems = lista.find('.list-group-item').length;
+                    if (totalItems <= 2) {
+                        toastr.error('No se puede eliminar el área porque se necesitan al menos dos áreas para un grupo.', 'Error');
+                    } else {
+                        // Quitar el área de la lista solo si quedan más de dos áreas
                         boton.closest('li').remove(); // Usar la referencia al botón
-                        toastr.success('Se eliminó el area', 'Éxito');
-                      
+                        toastr.success('Se eliminó el área', 'Éxito');
+                    }
 
                     },
                     error: function (xhr, status, error) {

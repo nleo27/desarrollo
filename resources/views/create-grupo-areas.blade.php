@@ -617,14 +617,54 @@
                 processData: false,
 
                 success: function(response) {
-                    console.log(response);
-                    $('#modal-editar-documento').modal('hide');
+                    toastr.success('Archivo Actualizado Correctament', 'Éxito');
+                    window.location.href = "{{ route('archivo-grupo.create') }}"; 
                 },
                 error: function(xhr, status, error) {
-                    var errorMessage = xhr.responseJSON.message;
-                    toastr.error(errorMessage, 'Error');
+                    // Captura el mensaje de error exacto del servidor
+                    var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Error desconocido";
+                    
+                    // Si hay más detalles en la respuesta de error, también captúralos
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        for (var key in errors) {
+                            if (errors.hasOwnProperty(key)) {
+                                errorMessage += ' ' + errors[key].join(' ');
+                            }
+                        }
+                    }
+                    
+                                 
+                    // Traduce el mensaje de error
+                    var translatedErrorMessage = translateErrorMessage(errorMessage);
+                    toastr.error(translatedErrorMessage, 'Error');
                 }
             });
+
+            function translateErrorMessage(message) {
+    var translations = {
+        "Forbidden": "Prohibido",
+        "The edit archivo field is required": "El archivo del nombre es requerido, no puedes enviar vacío",
+        "The upload.0 field must not be greater than 3072 kilobytes.": "El archivo no debe ser mayor de 3 Megas.",
+        "The upload.0 field must be a file of type: doc, docx, pdf, jpeg, png, jpg.": "El archivo debe ser de tipo: doc, docx, pdf, jpeg, png, jpg."
+        // Agrega más traducciones según sea necesario
+    };
+
+    // Intenta encontrar una traducción exacta
+    if (translations[message]) {
+        return translations[message];
+    }
+    
+    // Búsqueda de traducciones parciales si el mensaje contiene detalles adicionales
+    for (var key in translations) {
+        if (message.includes(key)) {
+            return translations[key];
+        }
+    }
+
+    // Si no hay traducción, devuelve el mensaje original
+    return message;
+}
         });
 
     

@@ -74,6 +74,15 @@ class GrupoAreaController extends Controller
             toastr()->error('La relación entre el grupo y el área no fue encontrada.', 'Error');
             return Redirect::back();
         }
+
+        // Contar el número de áreas asociadas al grupo
+        $totalAreas = GrupoArea::where('grupo_id', $grupoId)->count();
+
+        // Verificar si el grupo tiene al menos dos áreas
+        if ($totalAreas <= 2) {
+            
+            return Redirect::back();
+        }
     
         // Actualizar el campo area_id a null en la tabla grupo_area
         $relacion->update(['area_id' => null]);

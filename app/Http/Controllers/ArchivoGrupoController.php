@@ -174,7 +174,7 @@ class ArchivoGrupoController extends Controller
 
         // Validar la solicitud
         $request->validate([
-            'edit_archivo' => 'nullable|string|max:255',
+            'edit_archivo' => 'required|string|max:255',
             'edit_descripcion' => 'nullable|string|max:255',
             'upload' => 'nullable|array|max:5', // Máximo 5 archivos permitidos
             'upload.*' => 'nullable|file|mimes:doc,docx,pdf,jpeg,png,jpg|max:3072', // Tipos y tamaño de archivo permitidos
