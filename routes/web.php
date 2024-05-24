@@ -13,6 +13,7 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\GrupoAreaController;
 use App\Http\Controllers\ArchivoGrupoController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CartaController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -52,6 +53,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/eliminar-archivo-grupo/{id}', [ArchivoGrupoController::class, 'eliminar'])->name('archivoGrupo.eliminar');
 
     Route::post('/archivo-grupo/{id}', [ArchivoGrupoController::class, 'updateAjax'])->name('archivo-grupo.updateAjax');
+
+    //RUTA CARTAS
+
+    Route::get('/cartas', [CartaController::class, 'index']);
 
    
 

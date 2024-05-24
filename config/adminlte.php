@@ -389,6 +389,16 @@ return [
             'can' => '',
         ],
 
+        ['header' => 'CARTAS'],
+        [
+            'text' => 'Crear Carta',
+            'url' => 'cartas',
+            'icon' => 'fas fa-file-alt',
+            'can' => '',
+        ],
+
+        
+
         
         ['header' => 'account_settings'],
         [
