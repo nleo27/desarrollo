@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Carta;
 use App\Models\Usuario;
+use App\Models\Requerimiento;
 
 class CartaController extends Controller
 {
@@ -52,7 +53,38 @@ class CartaController extends Controller
 
     public function show(Carta $carta)
     {
-        return view('show', compact('carta'));
+        $adminUsers = Usuario::role('Administrador')->get();
+        $requerimientos = $carta->requerimientos;
+        return view('show', compact('carta', 'adminUsers', 'requerimientos'));
+    }
+
+    public function storeRequerimiento(Request $request)
+    {
+        // Validar los datos del formulario
+        $request->validate([
+            'id_carta' => 'required|integer|exists:cartas,id',
+            'requerimiento' => 'required|string',
+            'dirigido' => 'required|integer|exists:users,id',
+        ]);
+
+        // Crear un nuevo requerimiento
+
+        $requerimiento= new Requerimiento();
+        $requerimiento->id_carta = $request->id_carta;
+        $requerimiento->texto_requerimiento = $request->requerimiento;
+        $requerimiento->fecha_inicio = $request->fecha_inicio;
+        $requerimiento->fecha_fin = $request->fecha_caduca;
+        $requerimiento->dirigido = $request->dirigido;
+        $requerimiento->save();
+       
+
+        // Mostrar un mensaje de éxito con Toastr
+        toastr()->success('Requerimiento asignado correctamente', 'Notificación');
+        
+
+        // Redirigir a la vista 'show' de la carta con el mensaje de éxito
+        return redirect()->back();
+        //return redirect()->route('show', $request->input('id_carta'));
     }
 
     

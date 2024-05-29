@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cartas', [CartaController::class, 'index'])->name('cartas.index');
     Route::post('/cartas', [CartaController::class, 'store'])->name('cartas.store');
     Route::get('/cartas/{carta}', [CartaController::class, 'show'])->name('cartas.show');
+    Route::post('/cartas/{carta}', [CartaController::class, 'storeRequerimiento'])->name('requerimientos.store');
 
    
 
