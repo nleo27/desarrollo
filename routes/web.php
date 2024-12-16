@@ -25,8 +25,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Rutas protegidas que requieren autenticación
 Route::middleware(['auth'])->group(function () {
-    Route::get('/create-usuario', [CreateUsuarioController::class, 'index'])->name('create_usuario');
-    Route::get('/create-area', [AreasController::class, 'index'])->name('create_area');
+    Route::get('/create-usuario', [CreateUsuarioController::class, 'index'])->name('create_usuario')->middleware('auth', 'can:create_usuario.index');
+    Route::get('/create-area', [AreasController::class, 'index'])->name('create_area')->middleware('auth', 'can:create_area.index');
     Route::post('/create-area', [AreasController::class, 'store'])->name('areas.store');
     Route::get('/create-periodo', [PeriodoController::class, 'create'])->name('create_periodo');
     Route::post('/create-periodo', [PeriodoController::class, 'create2'])->name('periodo.create2');
