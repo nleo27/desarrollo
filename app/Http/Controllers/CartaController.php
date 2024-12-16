@@ -46,7 +46,7 @@ class CartaController extends Controller
         $carta->fecha_caduca = $request->fechaCaduca;
         $carta->save();
 
-        toastr()->success('Se creo la carpeta corectamente', 'Notificación');
+        toastr()->success('Se creo la carta corectamente', 'Notificación');
 
         return redirect()->route('cartas.show');
     }
