@@ -96,4 +96,17 @@ class PeriodoController extends Controller
         // Redireccionar a la página de documentos
         return redirect()->route('documento.crear', ['id' => $id]);
     }
+
+    public function activar($id)
+{
+    // Desactivar todos los periodos
+    Periodo::where('periodo_activo', 1)->update(['periodo_activo' => 0]);
+
+    // Activar el periodo seleccionado
+    $periodo = Periodo::findOrFail($id);
+    $periodo->update(['periodo_activo' => 1]);
+
+    toastr()->success('El período ha sido activado correctamente.', 'Éxito');
+    return redirect()->back();
+}
 }

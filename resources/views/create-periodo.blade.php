@@ -50,8 +50,19 @@
                             
                             
                             <td>
-                            <a href="{{ route('seleccionar-periodo', ['id' => $periodo->id]) }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Seleccionar</a>
-                            
+
+                                <!-- Botón para activar el periodo -->
+                                @if($periodo->periodo_activo)
+                                    <button class="btn btn-secondary btn-sm" disabled>Activo</button>
+                                    @else
+                                    <form action="{{ route('periodo.activar', $periodo->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fas fa-toggle-on"></i> Activar
+                                        </button>
+                                    </form>
+                                @endif
+                                                        
                             @can('create_periodo.eliminar')
 
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-eliminar-area"><i class="fas fa-trash-alt"></i> Eliminar</button>

@@ -54,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/archivo-grupo/{id}', [ArchivoGrupoController::class, 'updateAjax'])->name('archivo-grupo.updateAjax');
 
+    Route::post('/periodos/{id}/activar', [PeriodoController::class, 'activar'])->name('periodo.activar');
+
     //RUTA CARTAS
 
     Route::get('/cartas', [CartaController::class, 'index'])->name('cartas.index');

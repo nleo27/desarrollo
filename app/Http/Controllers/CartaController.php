@@ -48,7 +48,7 @@ class CartaController extends Controller
 
         toastr()->success('Se creo la carta corectamente', 'Notificación');
 
-        return redirect()->route('cartas.show');
+        return redirect()->route('cartas.show', ['carta' => $carta->id]);
     }
 
     public function show(Carta $carta)
