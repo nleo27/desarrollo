@@ -87,5 +87,37 @@ class CartaController extends Controller
         //return redirect()->route('show', $request->input('id_carta'));
     }
 
+
+
+    public function listarCartas()
+    {
+        
+            // Obtiene solo las cartas creadas por el usuario autenticado
+        $cartas = Carta::where('id_usuario', auth()->user()->id)->get();
+
+        // Verifica si el usuario tiene cartas
+        $noCartasMessage = $cartas->isEmpty() ? 'Aún no has creado cartas.' : null;
+
+        // Retorna la vista con las cartas y el mensaje si no tiene cartas
+        return view('create-lista-cartas', compact('cartas', 'noCartasMessage'));
+    }
+
+    public function obtenerRequerimientos($id)
+        {
+            // Encuentra la carta por ID
+            $carta = Carta::find($id);
+
+            if ($carta) {
+                // Obtén los requerimientos de la carta
+                $requerimientos = $carta->requerimientos;  // Relación definida en el modelo Carta
+
+                // Retorna los requerimientos como una respuesta JSON
+                return response()->json(['requerimientos' => $requerimientos]);
+            } else {
+                // Si no se encuentra la carta, se retornan sin requerimientos
+                return response()->json(['requerimientos' => []]);
+            }
+        }
+
     
 }

@@ -397,6 +397,13 @@ return [
             'can' => '',
         ],
 
+        [
+            'text' => 'Lista de cartas',
+            'url' => 'lista-carta',
+            'icon' => 'fas fa-book',
+            'can' => '',
+        ],
+
         
 
         

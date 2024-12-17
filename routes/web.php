@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/archivo-grupo', [ArchivoGrupoController::class, 'create'])->name('archivo-grupo.create');
 
-    Route::post('/archivo-grupo', [ArchivoGrupoController::class, 'store'])->name('archivo-grupo.store');
+    Route::post('/archivo-grupo/guardar', [ArchivoGrupoController::class, 'store'])->name('archivo-grupo.store');
 
     Route::get('/archivo-grupo/getArchivos', [ArchivoGrupoController::class, 'getArchivos'])->name('archivo-grupo.getArchivos');
 
@@ -62,6 +62,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cartas', [CartaController::class, 'store'])->name('cartas.store');
     Route::get('/cartas/{carta}', [CartaController::class, 'show'])->name('cartas.show');
     Route::post('/cartas/{carta}', [CartaController::class, 'storeRequerimiento'])->name('requerimientos.store');
+   
+
+    Route::get('/lista-carta', [CartaController::class, 'listarCartas'])->name('listar.cartas')->middleware('auth');
+
+    Route::get('/cartas/{id}/requerimientos', [CartaController::class, 'obtenerRequerimientos']);
 
    
 
