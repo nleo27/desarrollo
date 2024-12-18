@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Carta;
 use App\Models\Usuario;
 use App\Models\Requerimiento;
+use App\Notifications\NuevaCartaNotification; // Importa la notificación
 
 class CartaController extends Controller
 {
     public function index()
     {
-        $adminUsers = Usuario::role('Administrador')->get();
-        return view('create-cartas',compact('adminUsers'));
+        // Obtener todos los usuarios excepto el usuario autenticado
+        $usuarios = Usuario::where('id', '!=', auth()->id())->get();
+        return view('create-cartas', compact('usuarios'));
     }
 
     public function store(Request $request)
@@ -45,6 +47,12 @@ class CartaController extends Controller
         $carta->mensaje= $request->cuerpoMensaje;
         $carta->fecha_caduca = $request->fechaCaduca;
         $carta->save();
+
+        // Obtener al usuario al que va dirigida la carta
+        $usuario = Usuario::findOrFail($request->id_usuario);
+
+        // Enviar notificación al usuario
+        $usuario->notify(new NuevaCartaNotification($carta));
 
         toastr()->success('Se creo la carta corectamente', 'Notificación');
 

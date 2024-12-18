@@ -41,8 +41,10 @@
                         <label for="dirigido">Dirigido a:</label>
                         
                         <select style="border: 2px solid" id="dirigido" name="dirigido" class="form-select" required>
-                            @foreach ($adminUsers as $adminUser) 
-                            <option value="{{ $adminUser->name }} {{ $adminUser->apellidos }}">{{ $adminUser->name }} {{ $adminUser->apellidos }}</option>
+                            @foreach ($usuarios as $usuario)
+                                <option value="{{ $usuario->name }} {{ $usuario->apellidos }}">
+                                    {{ $usuario->name }} {{ $usuario->apellidos }}
+                                </option>
                             @endforeach
                             
                             <!-- Puedes añadir más opciones según sea necesario -->
