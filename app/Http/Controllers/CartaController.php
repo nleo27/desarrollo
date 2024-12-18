@@ -119,5 +119,39 @@ class CartaController extends Controller
             }
         }
 
+        public function update(Request $request, $id)
+        {
+            // Encuentra el requerimiento que se va a actualizar
+            $requerimiento = Requerimiento::findOrFail($id);
+        
+            // Actualiza los datos del requerimiento
+            $requerimiento->update([
+                'texto_requerimiento' => $request->input('requerimiento'),
+                'fecha_inicio' => $request->input('fecha_inicio'),
+                'fecha_fin' => $request->input('fecha_caduca'),
+                'dirigido_id' => $request->input('dirigido'),
+            ]);
+        
+            // Redirige con un mensaje de éxito
+            return redirect()->route('cartas.show', ['carta' => $request->input('id_carta')])
+                             ->with('success', 'Requerimiento actualizado correctamente.');
+        }
+
+        public function destroy($id)
+            {
+                // Encuentra el requerimiento por su ID
+                $requerimiento = Requerimiento::findOrFail($id);
+
+                // Obtener el ID de la carta relacionada
+                $cartaId = $requerimiento->id_carta;
+
+                // Eliminar el requerimiento
+                $requerimiento->delete();
+
+                // Redirigir a la página de la carta correspondiente, pasando el ID de la carta
+                return redirect()->route('cartas.show', ['carta' => $cartaId])
+                                ->with('success', 'Requerimiento eliminado correctamente.');
+            }
+
     
 }

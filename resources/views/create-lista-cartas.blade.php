@@ -58,8 +58,9 @@
                             <td>{{ $carta->institucion }}</td>
                             <td>{{ $carta->asunto }}</td>
                             <td>
+                                <a href="{{ route('cartas.show', ['carta' => $carta->id]) }}" class="btn btn-warning">Ver Carta</a>
                                 <a href="#" class="btn btn-info" data-toggle="modal" data-target="#requerimientoModal" onclick="mostrarRequerimientos({{ $carta->id }})">Ver requerimiento</a>
-                            
+                                
                             </td>
                         </tr>
                         @endforeach

@@ -42,7 +42,7 @@
                         
                         <select style="border: 2px solid" id="dirigido" name="dirigido" class="form-select" required>
                             @foreach ($adminUsers as $adminUser) 
-                            <option value="{{ $adminUser->id }}">{{ $adminUser->name }}</option>
+                            <option value="{{ $adminUser->name }} {{ $adminUser->apellidos }}">{{ $adminUser->name }} {{ $adminUser->apellidos }}</option>
                             @endforeach
                             
                             <!-- Puedes añadir más opciones según sea necesario -->

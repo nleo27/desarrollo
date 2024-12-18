@@ -68,6 +68,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/cartas/{id}/requerimientos', [CartaController::class, 'obtenerRequerimientos']);
 
+    Route::put('/requerimientos/{requerimiento}', [CartaController::class, 'update'])->name('requerimientos.update');
+
+    Route::delete('/requerimientos/{id}', [CartaController::class, 'destroy'])->name('requerimientos.destroy');
+
    
 
     
