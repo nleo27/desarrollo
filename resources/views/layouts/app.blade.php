@@ -16,6 +16,12 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
+<script>
+    @if(Session::has('message'))
+        toastr.success("{{ Session::get('message') }}");
+    @endif
+</script>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">

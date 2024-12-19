@@ -32,4 +32,9 @@ class Carta extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
     }
+
+    public function destinatario()
+{
+    return $this->belongsTo(Usuario::class, 'dirigido'); // `dirigido` es la clave foránea que apunta a la tabla `users`
+}
 }

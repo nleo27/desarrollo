@@ -7,7 +7,17 @@ import 'bootstrap';
  */
 
 import axios from 'axios';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
 window.axios = axios;
+window.Pusher = Pusher;
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: '0f9a8ae710a50db568cb',
+    cluster: 'us2',
+    forceTLS: true
+});
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

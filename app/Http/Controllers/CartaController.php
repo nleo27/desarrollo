@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Carta;
 use App\Models\Usuario;
 use App\Models\Requerimiento;
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\NuevaCartaNotification; // Importa la notificación
 
 class CartaController extends Controller
@@ -48,11 +49,13 @@ class CartaController extends Controller
         $carta->fecha_caduca = $request->fechaCaduca;
         $carta->save();
 
-        // Obtener al usuario al que va dirigida la carta
-        $usuario = Usuario::findOrFail($request->id_usuario);
+        
+        // Obtener el usuario destinatario
+        $destinatario = Usuario::find($request->dirigido); // Ahora usamos el campo `dirigido`
 
-        // Enviar notificación al usuario
-        $usuario->notify(new NuevaCartaNotification($carta));
+        if ($destinatario) {
+            Notification::send($destinatario, new NuevaCartaNotification($carta));
+        }
 
         toastr()->success('Se creo la carta corectamente', 'Notificación');
 
@@ -160,6 +163,8 @@ class CartaController extends Controller
                 return redirect()->route('cartas.show', ['carta' => $cartaId])
                                 ->with('success', 'Requerimiento eliminado correctamente.');
             }
+
+            
 
     
 }

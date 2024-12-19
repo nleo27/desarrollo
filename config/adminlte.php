@@ -398,9 +398,16 @@ return [
         ],
 
         [
-            'text' => 'Lista de cartas',
+            'text' => 'Cartas Enviadas',
             'url' => 'lista-carta',
-            'icon' => 'fas fa-book',
+            'icon' => 'fas fa-envelope',
+            'can' => '',
+        ],
+
+        [
+            'text' => 'Cartas recibidas',
+            'url' => 'notificaciones',
+            'icon' => 'fas fa-envelope-open',
             'can' => '',
         ],
 

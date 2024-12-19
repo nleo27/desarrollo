@@ -15,6 +15,7 @@ use App\Http\Controllers\ArchivoGrupoController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CartaController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\RequerimientoController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -72,6 +73,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/requerimientos/{requerimiento}', [CartaController::class, 'update'])->name('requerimientos.update');
 
     Route::delete('/requerimientos/{id}', [CartaController::class, 'destroy'])->name('requerimientos.destroy');
+
+    Route::post('/requerimientos/{id}/subir-archivo', [RequerimientoController::class, 'subirArchivo']);
+
+    Route::get('/requerimientos/{id}/verificar-archivo', [RequerimientoController::class, 'verificarArchivo']);
+
 
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
 

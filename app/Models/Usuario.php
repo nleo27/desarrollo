@@ -49,4 +49,10 @@ class Usuario extends Authenticatable
     public function carpeta(){
         return $this->hasMany(Carpeta::class);
     }
+
+
+    public function cartasRecibidas()
+    {
+        return $this->hasMany(Carta::class, 'dirigido'); // Relaciona con la columna `dirigido` de la tabla `cartas`
+    }
 }
