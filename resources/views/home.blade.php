@@ -1,4 +1,16 @@
 @extends('adminlte::page')
+<style>
+    .badge-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+</style>
 
 @section('title', 'Dashboard')
 
@@ -35,16 +47,19 @@
         </div>
         
         <div class="col-lg-3 col-6">
-        
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>44</h3>
-                    <p>User Registrations</p>
+                    <h3>{{ $numeroCartas }}</h3>
+                    <p>Cartas Recibidas</p>
                 </div>
                 <div class="icon">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-envelope-open-text"></i>
+                    <!-- Indicador de carta nueva (muestra el número si hay cartas nuevas) -->
+                    @if ($cartasNuevas > 0)
+                        <span class="badge badge-danger badge-indicator">{{ str_pad($cartasNuevas, 2, '0', STR_PAD_LEFT) }}</span>
+                    @endif
                 </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">Ver Cartas Recibidas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         

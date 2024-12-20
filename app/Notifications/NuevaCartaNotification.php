@@ -29,32 +29,16 @@ class NuevaCartaNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'broadcast']; 
+        return ['database']; 
     }
 
    // Notificación en base de datos
    public function toDatabase($notifiable)
    {
-       return [
-           'nombre_carta' => $this->carta->nombre_carta,
-           'fecha_carta' => $this->carta->fecha_carta,
-           'mensaje' => "Tienes una nueva carta.",
-       ];
+        return new DatabaseMessage([
+            'mensaje' => 'Tienes una carta nueva.',
+        ]);
    }
 
-    // Notificación a través de broadcast
-    public function toBroadcast($notifiable)
-    {
-        return new BroadcastMessage([
-            'nombre_carta' => $this->carta->nombre_carta,
-            'fecha_carta' => $this->carta->fecha_carta,
-            'mensaje' => "Tienes una nueva carta.",
-        ]);
-    }
-
-    // Definir el canal para este broadcast
-    public function broadcastOn()
-    {
-        return new Channel('user.' . $this->carta->dirigido); // Canal privado por usuario
-    }
+    
 }

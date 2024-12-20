@@ -47,6 +47,9 @@
                             <!-- Aquí ya no es necesario el data-toggle y data-target -->
                           
                             <a href="#" class="btn btn-info" data-toggle="modal" data-target="#requerimientoModal" onclick="verRequerimiento({{ $carta->id }})">Ver requerimiento</a>
+                            
+                            <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#verDocumento" onclick="mostrarModal()">Ver adjuntos</a>
+                            
                         </td>
                         
 
@@ -76,6 +79,27 @@
                     </div>
                     </div>
                 </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="verDocumento" tabindex="-1" role="dialog" aria-labelledby="verDocumentoLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="verDocumentoLabel">Archivos Adjuntos</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="archivosAdjuntos">
+                            <!-- Los archivos adjuntos se cargarán aquí -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
                
@@ -112,7 +136,7 @@
                                 <form id="uploadForm-${requerimiento.id}" enctype="multipart/form-data">
                                     <div class="mb-3">
                                         <label for="archivo-${requerimiento.id}" class="form-label">Subir Archivo:</label>
-                                        <input class="form-control" type="file" id="archivo-${requerimiento.id}" name="archivo">
+                                        <input class="form-control" type="file" id="archivo-${requerimiento.id}" name="archivo" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpeg,.jpg,.png,.avif">
                                     </div>
                                     <div class="mb-3">
                                         <label for="observaciones-${requerimiento.id}" class="form-label">Observaciones:</label>
@@ -166,62 +190,77 @@
     <script>
 
         function guardarArchivo(requerimientoId) {
-    var formData = new FormData();
-    var archivoInput = document.getElementById(`archivo-${requerimientoId}`);
-    var observaciones = document.getElementById(`observaciones-${requerimientoId}`).value;
+            var formData = new FormData();
+            var archivoInput = document.getElementById(`archivo-${requerimientoId}`);
+            var observaciones = document.getElementById(`observaciones-${requerimientoId}`).value;
 
-    if (archivoInput.files.length === 0) {
-        toastr.error('Por favor, selecciona un archivo.');
-        return;
-    }
-
-    // Verificar si ya existe un archivo subido para este requerimiento
-    $.ajax({
-        url: `/requerimientos/${requerimientoId}/verificar-archivo`, // Ruta para verificar el archivo
-        method: 'GET',
-        success: function(response) {
-            if (response.hasFile) {
-                toastr.info('Ya existe un archivo subido para este requerimiento. Puedes actualizarlo.');
-            } else {
-                toastr.info('Aún no tienes ningún archivo subido para este requerimiento.');
+            if (archivoInput.files.length === 0) {
+                toastr.error('Por favor, selecciona un archivo.');
+                return;
             }
 
-            // Proceder con la subida del archivo
-            formData.append('archivo', archivoInput.files[0]);
-            formData.append('observaciones', observaciones);
-            formData.append('_token', '{{ csrf_token() }}'); // Asegúrate de que el token CSRF esté disponible
+            var archivo = archivoInput.files[0];
+            var tiposPermitidos = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'image/jpeg',
+                'image/png',
+                'image/avif'
+            ];
 
+            // Validar el tipo de archivo
+            if (!tiposPermitidos.includes(archivo.type)) {
+                toastr.error('El tipo de archivo es incorrecto. Solo se permiten archivos Word, Excel, PowerPoint, JPEG, JPG, PNG, PDF y AVIF.');
+                return;
+            }
+
+            // Validar el tamaño del archivo (máximo 3 MB)
+            var tamañoMaximoMB = 3;
+            if (archivo.size > tamañoMaximoMB * 1024 * 1024) {
+                toastr.error('El tamaño del archivo excede el límite de 3 MB. Por favor, selecciona un archivo más pequeño.');
+                return;
+            }
+
+            // Verificar si ya existe un archivo subido para este requerimiento
             $.ajax({
-                url: `/requerimientos/${requerimientoId}/subir-archivo`,
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                url: `/requerimientos/${requerimientoId}/verificar-archivo`, // Ruta para verificar el archivo
+                method: 'GET',
                 success: function(response) {
-                    toastr.success(response.mensaje); // Mostrar mensaje de éxito con Toastr
-                    // Opcional: cerrar el modal después de guardar
-                    var myModalEl = document.getElementById('requerimientoModal');
-                    var modal = bootstrap.Modal.getInstance(myModalEl);
-                    modal.hide();
+                   
+                    // Proceder con la subida del archivo
+                    formData.append('archivo', archivoInput.files[0]);
+                    formData.append('observaciones', observaciones);
+                    formData.append('_token', '{{ csrf_token() }}'); // Asegúrate de que el token CSRF esté disponible
+
+                    $.ajax({
+                        url: `/requerimientos/${requerimientoId}/subir-archivo`,
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            toastr.success(response.mensaje); // Mostrar mensaje de éxito con Toastr
+                            // Opcional: cerrar el modal después de guardar
+                            var myModalEl = document.getElementById('requerimientoModal');
+                            var modal = bootstrap.Modal.getInstance(myModalEl);
+                            modal.hide();
+                        },
+                        error: function(xhr) {
+                            toastr.error('Ocurrió un error al subir el archivo.');
+                        }
+                    });
                 },
-                error: function(xhr) {
-                    toastr.error('Ocurrió un error al subir el archivo.');
+                error: function() {
+                    toastr.error('Error al verificar si ya existe un archivo.');
                 }
             });
-        },
-        error: function() {
-            toastr.error('Error al verificar si ya existe un archivo.');
         }
-    });
-}
     </script>
-    
-    
-    
-
-
-   
-
 
 
 @endsection

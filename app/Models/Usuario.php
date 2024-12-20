@@ -55,4 +55,6 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Carta::class, 'dirigido'); // Relaciona con la columna `dirigido` de la tabla `cartas`
     }
+
+    
 }

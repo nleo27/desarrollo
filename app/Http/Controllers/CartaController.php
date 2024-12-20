@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use App\Models\Requerimiento;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NuevaCartaNotification; // Importa la notificación
+use Illuminate\Support\Facades\Auth;
 
 class CartaController extends Controller
 {
@@ -162,6 +163,25 @@ class CartaController extends Controller
                 // Redirigir a la página de la carta correspondiente, pasando el ID de la carta
                 return redirect()->route('cartas.show', ['carta' => $cartaId])
                                 ->with('success', 'Requerimiento eliminado correctamente.');
+            }
+
+            public function mostrarCartas()
+            {
+                            
+
+                // Obtener el ID del usuario autenticado
+                    $usuarioId = Auth::id();
+
+                    // Contar el número total de cartas recibidas por el usuario
+                    $numeroCartas = Carta::where('dirigido', $usuarioId)->count();
+
+                    // Contar cuántas cartas nuevas llegaron hoy (basado en 'created_at')
+                    $cartasNuevas = Carta::where('dirigido', $usuarioId)
+                                        ->whereDate('created_at', today()) // Filtra las cartas creadas hoy
+                                        ->count();
+
+                    // Retornar el número de cartas y la cantidad de cartas nuevas a la vista
+                    return view('home', compact('numeroCartas', 'cartasNuevas'));
             }
 
             

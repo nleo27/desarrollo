@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cartas', [CartaController::class, 'store'])->name('cartas.store');
     Route::get('/cartas/{carta}', [CartaController::class, 'show'])->name('cartas.show');
     Route::post('/cartas/{carta}', [CartaController::class, 'storeRequerimiento'])->name('requerimientos.store');
+    Route::get('/home', [CartaController::class, 'mostrarCartas'])->name('home');
    
 
     Route::get('/lista-carta', [CartaController::class, 'listarCartas'])->name('listar.cartas')->middleware('auth');
@@ -78,8 +79,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/requerimientos/{id}/verificar-archivo', [RequerimientoController::class, 'verificarArchivo']);
 
-
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
+
+    
+   
 
    
 

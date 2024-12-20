@@ -20,7 +20,7 @@ class RequerimientoController extends Controller
             {
                 // Validación de los datos del archivo
                 $request->validate([
-                    'archivo' => 'required|file|mimes:pdf,doc,docx|max:2048',
+                    'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,jpg,png,avif|max:3072', // 3072 KB = 3 MB
                     'observaciones' => 'nullable|string',
                 ]);
 
@@ -78,6 +78,8 @@ class RequerimientoController extends Controller
                     return response()->json(['hasFile' => false]); // No existe archivo
                 }
             }
+
+            
 
     /**
      * Show the form for creating a new resource.
