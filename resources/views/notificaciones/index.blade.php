@@ -11,6 +11,23 @@
 
 @section('title', 'Notificaciones')
 
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
+    <script>
+
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('0f9a8ae710a50db568cb', {
+        cluster: 'us2'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+        alert(JSON.stringify(data));
+        });
+    </script>
+
 @section('content')
 
     <div class="card mt-5">
@@ -23,42 +40,47 @@
     @if($cartas->isEmpty())
         <p style="text-align: center; color: red;">No tienes cartas nuevas.</p>
     @else
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre de la Carta</th>
-                    <th>Fecha</th>
-                    <th>Institución</th>
-                    <th>Asunto</th>
-                    <th>Fecha de Caducidad</th>
-                    <th>Requerimiento</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($cartas as $carta)
-                    <tr>
-                        <td>{{ $carta->nombre_carta }}</td>
-                        <td>{{ $carta->fecha_carta }}</td>
-                        <td>{{ $carta->institucion }}</td>
-                        <td>{{ $carta->asunto }}</td>
-                        <td>{{ $carta->fecha_caduca }}</td>
-                        
-                        <td>
-                            <!-- Aquí ya no es necesario el data-toggle y data-target -->
-                          
-                            <a href="#" class="btn btn-info" data-toggle="modal" data-target="#requerimientoModal" onclick="verRequerimiento({{ $carta->id }})">Ver requerimiento</a>
-                            
-                            <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#verDocumento" onclick="mostrarModal()">Ver adjuntos</a>
-                            
-                        </td>
-                        
+        <div class="card-body">
+            <div class="table-responsive">    
+                <table class="table table-bordered table-striped text-center" id="cartas-recibidas">
+                    <thead>
+                        <tr>
+                            <th>Nombre de la Carta</th>
+                            <th>Fecha</th>
+                            <th>Institución</th>
+                            <th>Asunto</th>
+                            <th>Fecha de Caducidad</th>
+                            <th>Requerimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($cartas as $carta)
+                            <tr>
+                                <td>{{ $carta->nombre_carta }}</td>
+                                <td>{{ $carta->fecha_carta }}</td>
+                                <td>{{ $carta->institucion }}</td>
+                                <td>{{ $carta->asunto }}</td>
+                                <td>{{ $carta->fecha_caduca }}</td>
+                                
+                                <td>
+                                    <!-- Aquí ya no es necesario el data-toggle y data-target -->
+                                
+                                    <a href="#" class="btn btn-info" data-toggle="modal" data-target="#requerimientoModal" onclick="verRequerimiento({{ $carta->id }})">Ver requerimiento</a>
+                                    
+                                    
+                                    <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#verDocumento" onclick="cargarArchivos({{ $carta->id }})">Ver adjuntos</a>
+                                    
+                                </td>
+                                
 
-                    </tr>
-                @endforeach
+                            </tr>
+                        @endforeach
 
-            
-            </tbody>
-        </table>
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
                 <!-- Modal para mostrar requerimientos -->
                 <div class="modal fade" id="requerimientoModal" tabindex="-1" role="dialog" aria-labelledby="requerimientoModalLabel" aria-hidden="true">
@@ -82,7 +104,7 @@
 
             <!-- Modal -->
             <div class="modal fade" id="verDocumento" tabindex="-1" role="dialog" aria-labelledby="verDocumentoLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="verDocumentoLabel">Archivos Adjuntos</h5>
@@ -112,6 +134,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pusher-js@7.0.3/dist/web/pusher.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+
+    <script>
+        new DataTable('#cartas-recibidas',{
+            responsive: true,
+            autoWidth: false,
+
+            "language": {
+                "lengthMenu": "Ver _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado - disculpa",
+                "info": "Estas en la página _PAGE_ de _PAGES_",
+                "infoEmpty": "No records available",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "search": "Buscar"
+            }
+        });
+    </script>
     
 
     <script>
@@ -262,5 +303,47 @@
         }
     </script>
 
+<script>
+function cargarArchivos(idCarta) {
+    fetch(`/obtener-archivos/${idCarta}`)
+        .then(response => response.json())
+        .then(data => {
+            const modalBody = document.getElementById('archivosAdjuntos');
+            modalBody.innerHTML = ''; // Limpiar contenido previo
+
+            if (data.length > 0) {
+                data.forEach(archivo => {
+                    // Verificar la extensión del archivo
+                    const extension = archivo.extension.toLowerCase();
+                    let contenido = `<p>Archivo: ${archivo.nombre}</p>`;
+
+                    // Si es un PDF, mostrar un visor
+                    if (['pdf'].includes(extension)) {
+                        contenido += `<embed src="${archivo.archivo}" type="application/pdf" width="100%" height="400px" />`;
+                    }
+                    // Si es una imagen (JPEG, PNG, JPG, etc.), mostrar un visor de imagen
+                    else if (['jpeg', 'png', 'jpg', 'gif'].includes(extension)) {
+                        contenido += `<img src="${archivo.archivo}" width="100%" height="auto" />`;
+                    }
+                    // Si es un archivo de Excel, Word o PowerPoint, mostrar solo el visor
+                    else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(extension)) {
+                        
+                    }
+                    
+                    // Siempre agregar el botón de descarga
+                    contenido += `<a href="${archivo.archivo}" class="btn btn-success" download>Descargar</a>`;
+
+                    // Añadir el contenido generado al modal
+                    modalBody.innerHTML += contenido;
+                });
+            } else {
+                modalBody.innerHTML = '<p>No hay archivos adjuntos para esta carta.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar los archivos:', error);
+        });
+}
+</script>
 
 @endsection

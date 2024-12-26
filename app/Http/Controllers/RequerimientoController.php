@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DetalleRequerimiento;
+use App\Models\Requerimiento;
 use Illuminate\Support\Facades\Storage;
 
 class RequerimientoController extends Controller
@@ -79,7 +80,37 @@ class RequerimientoController extends Controller
                 }
             }
 
-            
+            public function obtenerArchivos($idCarta)
+{
+    // Obtener los requerimientos asociados al id de la carta
+    $requerimientos = Requerimiento::where('id_carta', $idCarta)->pluck('id'); // Extraer los IDs de los requerimientos
+
+    // Obtener los archivos relacionados con esos requerimientos
+    $archivos = DetalleRequerimiento::whereIn('id_requerimiento', $requerimientos)->get();
+
+    // Mapear los archivos y obtener la URL completa para cada archivo
+    $archivosConUrl = $archivos->map(function ($archivo) {
+        // Obtener la URL completa del archivo usando Storage::url()
+        $urlArchivo = Storage::url($archivo->archivo);
+        
+        // Obtener la extensión del archivo
+        $extension = pathinfo($archivo->archivo, PATHINFO_EXTENSION);
+
+        // Retornar la URL completa del archivo junto con el nombre y su tipo
+        return [
+            'id' => $archivo->id,
+            'archivo' => $urlArchivo,
+            'nombre' => $archivo->archivo,
+            'extension' => $extension, // Agregar la extensión del archivo
+        ];
+    });
+
+    // Retornar la respuesta como JSON con los archivos y sus URLs
+    return response()->json($archivosConUrl);
+}
+
+        
+
 
     /**
      * Show the form for creating a new resource.

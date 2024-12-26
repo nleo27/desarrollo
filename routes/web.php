@@ -81,6 +81,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
 
+    Route::get('/obtener-archivos/{idCarta}', [RequerimientoController::class, 'obtenerArchivos'])->name('obtener.archivos');
+
+
     
    
 
