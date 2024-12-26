@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Carta;
 use App\Models\Usuario;
 use App\Models\Requerimiento;
+use App\Events\PostCreated;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NuevaCartaNotification; // Importa la notificación
 use Illuminate\Support\Facades\Auth;
@@ -51,12 +52,7 @@ class CartaController extends Controller
         $carta->save();
 
         
-        // Obtener el usuario destinatario
-        $destinatario = Usuario::find($request->dirigido); // Ahora usamos el campo `dirigido`
-
-        if ($destinatario) {
-            Notification::send($destinatario, new NuevaCartaNotification($carta));
-        }
+       event(new PostCreated($carta));
 
         toastr()->success('Se creo la carta corectamente', 'Notificación');
 
