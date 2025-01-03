@@ -411,6 +411,15 @@ return [
             'can' => '',
         ],
 
+        ['header' => 'BUSCADORES'],
+        [
+            'text' => 'Buscar archivos',
+            'url' => 'buscador',
+            'icon' => 'fas fa-search',
+            'can' => '',
+        ],
+
+
         
 
         

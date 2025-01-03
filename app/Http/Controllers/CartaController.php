@@ -111,21 +111,28 @@ class CartaController extends Controller
     }
 
     public function obtenerRequerimientos($id)
-        {
-            // Encuentra la carta por ID
-            $carta = Carta::find($id);
+{
+    // Encuentra la carta por ID
+    $carta = Carta::find($id);
 
-            if ($carta) {
-                // Obtén los requerimientos de la carta
-                $requerimientos = $carta->requerimientos;  // Relación definida en el modelo Carta
+    if ($carta) {
+        // Obtén los requerimientos de la carta junto con los archivos relacionados
+        $requerimientos = $carta->requerimientos->map(function ($requerimiento) {
+            return [
+                'id' => $requerimiento->id,
+                'texto_requerimiento' => $requerimiento->texto_requerimiento,
+                'fecha_inicio' => $requerimiento->fecha_inicio,
+                'fecha_fin' => $requerimiento->fecha_fin,
+                'dirigido' => $requerimiento->dirigido,
+                'archivos' => $requerimiento->detalleRequerimientos->pluck('archivo'), // Asumiendo que 'archivo' es la columna con la ruta/nombre del archivo
+            ];
+        });
 
-                // Retorna los requerimientos como una respuesta JSON
-                return response()->json(['requerimientos' => $requerimientos]);
-            } else {
-                // Si no se encuentra la carta, se retornan sin requerimientos
-                return response()->json(['requerimientos' => []]);
-            }
-        }
+        return response()->json(['requerimientos' => $requerimientos]);
+    } else {
+        return response()->json(['requerimientos' => []]);
+    }
+}
 
         public function update(Request $request, $id)
         {

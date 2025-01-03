@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CartaController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\RequerimientoController;
+use App\Http\Controllers\BuscadorController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -82,6 +83,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
 
     Route::get('/obtener-archivos/{idCarta}', [RequerimientoController::class, 'obtenerArchivos'])->name('obtener.archivos');
+
+    Route::get('/buscador', [BuscadorController::class, 'index'])->name('buscador.index');
+    
+    Route::get('/obtener/archivos', [BuscadorController::class, 'obtenerArchivos']);
 
 
     

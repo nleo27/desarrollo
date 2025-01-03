@@ -21,4 +21,9 @@ class Requerimiento extends Model
     {
         return $this->belongsTo(Carta::class, 'id_carta');
     }
+
+    public function detalleRequerimientos()
+    {
+        return $this->hasMany(DetalleRequerimiento::class, 'id_requerimiento', 'id');
+    }
 }
